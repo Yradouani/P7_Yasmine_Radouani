@@ -17,11 +17,14 @@ export default {};
 
 <style>
 #logout {
-  width: 200px;
+  width: 150px;
   height: 40px;
   background-color: cadetblue;
   border-radius: 10px;
   cursor: pointer;
+  position: absolute;
+  left: 20px;
+  top: 30px;
 }
 i {
   font-size: 30px;
@@ -29,11 +32,14 @@ i {
 }
 #profile-container {
   position: absolute;
-  right: 10px;
-  top: 10px;
-  color: inherit;
+  right: 20px;
+  top: 20px;
   display: flex;
   flex-direction: column;
+  transition : all 200ms;
+}
+#profile-container:hover {
+  transform: scale(1.1);
 }
 #profile {
     margin-top: 10px;
