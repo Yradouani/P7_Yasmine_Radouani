@@ -4,11 +4,13 @@
     <h2 v-if="mode == 'login'">Connexion</h2>
     <h2 v-else>Créer un compte</h2>
     <div id="create-accompt" v-if="mode == 'login'">
-      <span >Je n'ai pas encore de compte ? </span>
-      <span @click="switchToCreateAccount()" id="create_account">Créer un compte</span>
+      <span>Je n'ai pas encore de compte ? </span>
+      <span @click="switchToCreateAccount()" id="create_account"
+        >Créer un compte</span
+      >
     </div>
     <div id="create-accompt" v-else>
-      <span >J'ai déjà compte ? </span>
+      <span>J'ai déjà compte ? </span>
       <span @click="switchToLogin()" id="connect">Se connecter</span>
     </div>
     <div id="input-container">
@@ -40,26 +42,85 @@
       />
     </div>
     <router-link to="/forum">
-      <button type="submit" @click="connexion" id="signin">Connexion</button>
+      <button
+        type="submit"
+        @click="connexion"
+        id="signin"
+        v-if="mode == 'login'"
+        class="button"
+      >
+        Connexion
+      </button>
+      <button
+        type="submit"
+        @click="connexion"
+        id="signin"
+        v-else
+        class="button"
+      >
+        Inscription
+      </button>
     </router-link>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Login',
+  name: "Login",
   data: function () {
-      return {
-        mode: 'login',
+    return {
+      mode: "login",
+    };
+  },
+  computed: {
+    validatedFields: function () {
+      if (this.mode == "create") {
+        if (
+          this.email != "" &&
+          this.prenom != "" &&
+          this.nom != "" &&
+          this.password != ""
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        if (this.email != "" && this.password != "") {
+          return true;
+        } else {
+          return false;
+        }
       }
+    },
   },
   methods: {
-      switchToCreateAccount : function () {
-        this.mode = 'create';
-      },
-      switchToLogin : function () {
-        this.mode = 'login'
-      }
+    switchToCreateAccount: function () {
+      this.mode = "create";
+    },
+    switchToLogin: function () {
+      this.mode = "login";
+    },
+    // activeButton: function (btn) {
+    //   if (this.mode == "create") {
+    //     if (
+    //       this.email != "" &&
+    //       this.prenom != "" &&
+    //       this.nom != "" &&
+    //       this.password != ""
+    //     ) {
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   } else {
+    //     if (this.email != "" && this.password != "") {
+    //       return true;
+    //     } else {
+    //       return false;
+    //     }
+    //   }
+    // },
   },
   setup(props, ctx) {
     let newUser = {
@@ -148,7 +209,8 @@ input::placeholder {
 #lastname {
   width: 50%;
 }
-#create_account, #connect {
+#create_account,
+#connect {
   color: cadetblue;
   font-weight: bold;
   cursor: pointer;
