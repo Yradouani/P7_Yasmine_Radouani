@@ -9,14 +9,18 @@
   <router-link to="/">
     <button id="logout">Se déconnecter</button>
   </router-link>
-  <input id="message" type="texte" placeholder="Écrivez votre message" v-model="newMessage"/>
+  <input id="message" type="texte" placeholder="Écrivez votre message" v-model="newMessage" @keypress.enter="sendMessage"/>
   <button id="send-message" @click="sendMessage" v-if="newMessage != ''">Publier mon message</button>
 
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
       <span>{{ singleMessage.message }}</span>
       <div>
       <span id="trash" @click="deleteMessage(singleMessage)"><i class="fas fa-trash-alt" ></i></span>
-      <span id="update" @click="updateMessage()"><i class="fas fa-edit"></i></span>
+      <span id="update" @click="updateMessage(singleMessage)"><i class="fas fa-edit"></i></span>
+      <span v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id">
+        <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.message" @keypress.enter="save"/>
+        <button id="update-message" @click="save">Sauvegarder</button>
+      </span>
       </div>
   </div>
 </template>
@@ -41,8 +45,12 @@ export default {
       allMessages.value = allMessages.value.filter(m => m.id !== singleMessage.id);
 
     };
-    const updateMessage = function () {
-
+    let messageToUpdate = ref(null);
+    const updateMessage = function (singleMessage) {
+        messageToUpdate.value = singleMessage;
+    };
+    let save = function () {
+        messageToUpdate.value = null;
     };
     return {
       newMessage,
@@ -50,6 +58,8 @@ export default {
       allMessages,
       deleteMessage,
       updateMessage,
+      save,
+      messageToUpdate,
     };
   }
 };
@@ -114,6 +124,7 @@ input:focus{
   border: 2px solid cadetblue;
   margin-top: 10px;
   padding: 10px;
+  display: flex;
 }
 #trash i, #update i{
   font-size: 15px;
