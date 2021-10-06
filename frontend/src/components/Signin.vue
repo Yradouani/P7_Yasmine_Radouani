@@ -17,59 +17,48 @@
       <input
         type="text"
         id="email"
-        v-model="newUser.adress"
+        v-model="email"
         placeholder="Adresse mail"
       />
       <div id="firstname-lastname" v-if="mode == 'create'">
-        <input
-          type="text"
-          id="firstname"
-          v-model="newUser.firstname"
+        <input type="text" id="firstname"
+          v-model="firstname"
           placeholder="Prénom"
         />
         <input
           type="text"
           id="lastname"
-          v-model="newUser.lastname"
+          v-model="lastname"
           placeholder="Nom"
         />
       </div>
       <input
         type="text"
         id="password"
-        v-model="newUser.password"
+        v-model="password"
         placeholder="Mot de passe"
       />
     </div>
     <router-link to="/forum">
-      <button
-        type="submit"
-        @click="connexion"
-        id="signin"
-        v-if="mode == 'login'"
-        class="button"
-      >
-        Connexion
-      </button>
-      <button
-        type="submit"
-        @click="connexion"
-        id="signin"
-        v-else
-        class="button"
-      >
-        Inscription
-      </button>
+      <button @click="login()" v-if="mode == 'login'" class="button" :class="{'button--disabled' : !validatedFields}">
+        Connexion</button>
+      <button @click="createAccount()" class="button" :class="{'button--disabled' : !validatedFields}" v-else>
+        Inscription</button>
     </router-link>
   </div>
 </template>
 
 <script>
+// import store from '@/store/'
 export default {
   name: "Login",
   data: function () {
     return {
       mode: "login",
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
     };
   },
   computed: {
@@ -77,8 +66,8 @@ export default {
       if (this.mode == "create") {
         if (
           this.email != "" &&
-          this.prenom != "" &&
-          this.nom != "" &&
+          this.firstname != "" &&
+          this.lastname != "" &&
           this.password != ""
         ) {
           return true;
@@ -101,49 +90,63 @@ export default {
     switchToLogin: function () {
       this.mode = "login";
     },
-    // activeButton: function (btn) {
-    //   if (this.mode == "create") {
-    //     if (
-    //       this.email != "" &&
-    //       this.prenom != "" &&
-    //       this.nom != "" &&
-    //       this.password != ""
-    //     ) {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   } else {
-    //     if (this.email != "" && this.password != "") {
-    //       return true;
-    //     } else {
-    //       return false;
-    //     }
-    //   }
-    // },
+    createAccount: function (){
+      console.log(this.email, this.firstname, this.lastname, this.password);
+      this.$store.dispatch('createAccount', {
+      firstname: this.firstname,
+      lastname: this.lastname,
+      email: this.email,
+      password: this.password,
+      }).then(function (response) {
+          console.log(response);
+      }), function (error) {
+        console.log(error);
+      }
+    },
+    login: function (){
+      this.$store.dispatch('login', {
+      email: this.email,
+      password: this.password,
+      }).then(function (response) {
+          console.log(response);
+      }), function (error) {
+        console.log(error);
+      }
+    }
+    
   },
-  setup(props, ctx) {
-    let newUser = {
-      firstname: "",
-      lastname: "",
-      adress: "",
-      password: "",
-    };
-    const connexion = function () {
-      console.log(newUser);
-      ctx.emit("add", newUser);
-      newUser.value = "";
-    };
+  // let newUser = {
+      // firstname: "",
+      // lastname: "",
+      // adress: "",
+      // password: "",
+      // };
+  // setup(props, ctx) {
+  //   let newUser = {
+  //     firstname: "",
+  //     lastname: "",
+  //     adress: "",
+  //     password: "",
+  //   };
+  //   const connexion = function () {
+  //     console.log(newUser);
+  //     ctx.emit("add", newUser);
+  //     newUser.value = "";
+  //   };
+  //   const createAccount = function (){
+  //     $store.dispatch('createAccount', newUser)
+  //   };
 
-    return {
-      newUser,
-      connexion,
-    };
-  },
+  //   return {
+  //     newUser,
+  //     connexion,
+  //     createAccount,
+  //   };
+  // },
 };
 </script>
 
-<style>
+<style scoped>
 h1 {
   font-size: 25px;
 }
@@ -157,15 +160,6 @@ h1 {
   justify-content: center;
   margin-top: 20px;
   flex-direction: column;
-}
-#signin {
-  width: 200px;
-  height: 40px;
-  background-color: cadetblue;
-  border-radius: 10px;
-  cursor: pointer;
-  margin-top: 30px;
-  margin-bottom: 20px;
 }
 input {
   background-color: aliceblue;
@@ -215,4 +209,23 @@ input::placeholder {
   font-weight: bold;
   cursor: pointer;
 }
+.button {
+  width: 200px;
+  height: 40px;
+  background-color: cadetblue;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 30px;
+  margin-bottom: 20px;
+  border: none;
+}
+.button--disabled {
+    background:#cecece;
+    color:#ececec
+}
+.button--disabled:hover {
+    cursor:not-allowed;
+    background:#cecece;
+}
+
 </style>

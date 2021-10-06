@@ -18,7 +18,7 @@
 export default {};
 </script>
 
-<style>
+<style scoped>
 #logout {
   width: 200px;
   height: 40px;
