@@ -39,17 +39,24 @@
         placeholder="Mot de passe"
       />
     </div>
-    <router-link to="/forum">
+    <!-- <div v-if="mode == 'login' && status == 'error_login'">Adresse mail et/ou mot de passe invalide</div> -->
+    <!-- <div v-if="mode == 'login' && status == 'error_create'">Adresse mail déjà utilisée</div> -->
+    
       <button @click="login()" v-if="mode == 'login'" class="button" :class="{'button--disabled' : !validatedFields}">
-        Connexion</button>
+        <span v-if="status == 'loading'">En cours de connexion...</span>
+        <span v-else>Connexion</span>
+      </button>
       <button @click="createAccount()" class="button" :class="{'button--disabled' : !validatedFields}" v-else>
-        Inscription</button>
-    </router-link>
+        <span v-if="status == 'loading'">En cours de création...</span>
+        <span v-else>Inscription</span>
+      </button>
+    
   </div>
 </template>
 
 <script>
 // import store from '@/store/'
+import {mapState} from 'vuex';
 export default {
   name: "Login",
   data: function () {
@@ -82,6 +89,7 @@ export default {
         }
       }
     },
+    ...mapState([status])
   },
   methods: {
     switchToCreateAccount: function () {
@@ -91,24 +99,26 @@ export default {
       this.mode = "login";
     },
     createAccount: function (){
+      const self = this;
       console.log(this.email, this.firstname, this.lastname, this.password);
       this.$store.dispatch('createAccount', {
       firstname: this.firstname,
       lastname: this.lastname,
       email: this.email,
       password: this.password,
-      }).then(function (response) {
-          console.log(response);
+      }).then(function () {
+          self.login();
       }), function (error) {
         console.log(error);
       }
     },
     login: function (){
+      const self = this;
       this.$store.dispatch('login', {
       email: this.email,
       password: this.password,
-      }).then(function (response) {
-          console.log(response);
+      }).then(function () {
+          self.$router.push('/forum');
       }), function (error) {
         console.log(error);
       }
@@ -215,8 +225,7 @@ input::placeholder {
   background-color: cadetblue;
   border-radius: 10px;
   cursor: pointer;
-  margin-top: 30px;
-  margin-bottom: 20px;
+  margin: 20px auto;
   border: none;
 }
 .button--disabled {
