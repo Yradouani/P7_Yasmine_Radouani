@@ -12,9 +12,13 @@
     </router-link>
   </div>
   <h1>Bienvenue dans le forum</h1>
-  <input id="message" type="texte" placeholder="Écrivez votre message" v-model="newMessage" @keypress.enter="sendMessage"/>
-  <button id="send-message" @click="sendMessage" v-if="newMessage != ''">Publier mon message</button>
+  <div id="message_container">
+  <span>Exprimez-vous !</span>
+  <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="newMessage" @keypress.enter="sendMessage"/>
+  <button id="send-message" @click="sendMessage" >Publier mon message</button>
+  </div>
 
+  <div id="all-message-container">
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
       <span>{{ singleMessage.message }}</span>
       <div>
@@ -25,6 +29,7 @@
         <button id="update-message" @click="save">Sauvegarder</button>
       </span>
       </div>
+  </div>
   </div>
 </template>
 
@@ -55,6 +60,9 @@ export default {
     let save = function () {
         messageToUpdate.value = null;
     };
+    const validatedFields = function () {
+        newMessage.value != '';
+    };
     return {
       newMessage,
       sendMessage,
@@ -63,12 +71,16 @@ export default {
       updateMessage,
       save,
       messageToUpdate,
+      validatedFields,
     };
   }
 };
 </script>
 
 <style scoped>
+body{
+  background-image: url(../assets/e96669f09c136d4598a04830d9874ad5.jpg);
+}
 #app{
   background-color: white;
 }
@@ -113,11 +125,23 @@ i {
 a {
     color: inherit;
 }
-#message {
+#message_container {
+  background-color: white;
+  border: 1px solid black;
+  width: 80%;
+}
+.message {
   border: 1px solid black;
   width: 80%;
   height: 150px;
   padding-left: 10px;
+  margin: 20px auto;
+}
+#all-message-container {
+  background-color: white; 
+  width: 80%;
+  margin-top: 30px;
+  padding: 20px 30px 20px 30px;
 }
 input {
   display: flex;
