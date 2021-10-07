@@ -4,20 +4,33 @@ const instance = axios.create({
   baseURL: 'https://www.wawasensei.dev/api/demo-auth/'
 });
 
-let user = localStorage.getItems('user');
-if (!user) {
-    user = {
-        userId: -1,
-        token: '',
-    };
-}else {
-    user = JSON.parse(user);
-}
+// let user = localStorage.getItems('user');
+// if (!user) {
+//     user = {
+//         userId: -1,
+//         token: '',
+//     };
+// }else {
+//     try {
+//         user = JSON.parse(user);
+//         instance.defaults.headers.common['Authorization'] = user.token;
+//     }catch (ex){
+//         user = {
+//         userId: -1,
+//         token: '',
+//     };
+//     }
+    
+// }
 
 const store = createStore ({
     state : {
         status: '',
-        user: user,
+        // user: user,
+        user: {
+            userId: -1,
+            token: '',
+        },
         userInfos: {
             firstname: '',
             lastname: '',
@@ -34,7 +47,7 @@ const store = createStore ({
         },
         logUser: function (state, user) {
             instance.defaults.headers.common['Authorization'] = user.token;
-            localStorage.setItem('user', JSON.stringify(user));
+            // localStorage.setItem('user', JSON.stringify(user));
             state.user = user;
         },
         userInfos: function (state, userInfos) {

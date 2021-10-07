@@ -1,14 +1,17 @@
 <template>
-  <router-link to="/profile">
-    <div id="profile-container">
-      <i class="fas fa-user-circle"></i>
-      <span id="profile">Mon profil</span>
-    </div>
-  </router-link>
+  <div id="header-container">
+    <router-link to="/">
+      <button id="logout">Se déconnecter</button>
+    </router-link>
+    <img src="../assets/logo.png" alt="logo" id="logo" >
+    <router-link to="/profile">
+      <div id="profile-container">
+        <i class="fas fa-user-circle"></i>
+        <span id="profile">Mon profil</span>
+      </div>
+    </router-link>
+  </div>
   <h1>Bienvenue dans le forum</h1>
-  <router-link to="/">
-    <button id="logout">Se déconnecter</button>
-  </router-link>
   <input id="message" type="texte" placeholder="Écrivez votre message" v-model="newMessage" @keypress.enter="sendMessage"/>
   <button id="send-message" @click="sendMessage" v-if="newMessage != ''">Publier mon message</button>
 
@@ -66,6 +69,9 @@ export default {
 </script>
 
 <style scoped>
+#app{
+  background-color: white;
+}
 #logout {
   width: 130px;
   height: 30px;
@@ -125,9 +131,12 @@ input:focus{
   margin-top: 10px;
   padding: 10px;
   display: flex;
+  width: 80%;
+  justify-content: space-between;
 }
 #trash i, #update i{
   font-size: 15px;
   margin-left: 15px;
+  cursor: pointer;
 }
 </style>

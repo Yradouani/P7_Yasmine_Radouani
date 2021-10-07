@@ -1,6 +1,4 @@
 <template>
-<img src="../icon-left-font-monochrome-black.png" alt="logo" id="logo" >
-
 <router-view></router-view>
 </template>
 
@@ -31,7 +29,6 @@ export default {
 <style>
 body {
   background-color: rgb(231, 250, 244);
-
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

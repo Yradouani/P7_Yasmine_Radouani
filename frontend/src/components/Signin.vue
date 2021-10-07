@@ -1,4 +1,5 @@
 <template>
+  <img src="../assets/logo.png" alt="logo" id="logo" >
   <h1>Bienvenue sur votre réseau social d'entreprise !</h1>
   <div id="connexion" @submit.prevent="connexion">
     <h2 v-if="mode == 'login'">Connexion</h2>
