@@ -15,10 +15,13 @@
   <div id="message_container">
   <span>Exprimez-vous !</span>
   <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="newMessage" @keypress.enter="sendMessage"/>
-  <button id="send-message" @click="sendMessage" >Publier mon message</button>
+  <div id="button_container">
+    <button id="add-picture">Ajouter une image</button>
+    <button id="send-message" @click="sendMessage" >Publier mon message</button>
+  </div>
   </div>
 
-  <div id="all-message-container">
+  <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
       <span>{{ singleMessage.message }}</span>
       <div>
@@ -87,26 +90,42 @@ body{
 #logout {
   width: 130px;
   height: 30px;
-  background-color: cadetblue;
+  background-color: rgb(189, 195, 196);
   border-radius: 10px;
   cursor: pointer;
   position: absolute;
   left: 20px;
   top: 30px;
   border: none;
+  box-shadow: 2px 2px 3px rgb(209, 209, 209);
 }
-#send-message {
-  background-color: cadetblue;
+#button_container {
+  display: flex;
+  justify-content: space-between;
+}
+#add-picture {
+  background-color: rgb(189, 195, 196);
   border-radius: 10px;
   cursor: pointer;
   width: 150px;
   height: 30px;
   border: none;
   margin: 15px auto;
+  box-shadow: 1px 2px 3px rgb(209, 209, 209);
+}
+#send-message {
+  background-color: rgb(189, 195, 196);
+  border-radius: 10px;
+  cursor: pointer;
+  width: 150px;
+  height: 30px;
+  border: none;
+  margin: 15px auto;
+  box-shadow: 1px 2px 3px rgb(209, 209, 209);
 }
 i {
   font-size: 30px;
-  color: cadetblue;
+  color: rgb(189, 195, 196);
 }
 #profile-container {
   position: absolute;
@@ -129,6 +148,10 @@ a {
   background-color: white;
   border: 1px solid black;
   width: 80%;
+  padding-top: 20px;
+}
+#message_container span {
+  text-align: start;
 }
 .message {
   border: 1px solid black;
@@ -142,6 +165,7 @@ a {
   width: 80%;
   margin-top: 30px;
   padding: 20px 30px 20px 30px;
+  margin-bottom: 50px;
 }
 input {
   display: flex;
@@ -151,7 +175,7 @@ input:focus{
     outline: 3px black;
 }
 #message-container {
-  border: 2px solid cadetblue;
+  border: 1px solid rgb(189, 195, 196);
   margin-top: 10px;
   padding: 10px;
   display: flex;
