@@ -1,13 +1,13 @@
 import express from 'express';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
-
+import morgan from 'morgan';
 
 
 
 const app = express();
 app.use(helmet());
-
+app.use(morgan('dev'));
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');

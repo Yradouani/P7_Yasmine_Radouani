@@ -15,5 +15,8 @@
     "helmet": "^4.6.0",
     "nodemon": "^2.0.13"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "morgan": "^1.10.0"
+  }
 }

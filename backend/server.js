@@ -1,6 +1,8 @@
 import http from 'http';
 import app from './app.js';
 import bodyParser from "body-parser";
+import userRoutes from './routes/user.js';
+import messageRoutes from './routes/message.js';
 
 
 const normalizePort = val => {
@@ -18,9 +20,8 @@ const normalizePort = val => {
   app.use(bodyParser.json());
 
   app.set('port', port);
-  app.use((req, res) => {
-    res.json({ message: 'Votre requête a bien été reçue !' }); 
- });
+  app.use('/api/messages', messageRoutes);
+  app.use('/api', userRoutes);
 
 
   const errorHandler = error => {
