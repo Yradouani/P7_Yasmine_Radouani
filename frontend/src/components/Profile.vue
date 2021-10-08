@@ -33,7 +33,7 @@ export default {
       this.$router.push('/');
       return;
     }
-    this.store.dispatch('getUserInfos');
+    this.$store.dispatch('getUserInfos');
   }
 
 };
@@ -92,7 +92,7 @@ a {
   margin-top: 20px;
 }
 #image-container {
-  width: 50%;
+  width: 45%;
   height: 350px;
   overflow: hidden;
   margin: 20px auto;
