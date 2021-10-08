@@ -18,6 +18,9 @@ const normalizePort = val => {
   app.use(bodyParser.json());
 
   app.set('port', port);
+  app.use((req, res) => {
+    res.json({ message: 'Votre requête a bien été reçue !' }); 
+ });
 
 
   const errorHandler = error => {
