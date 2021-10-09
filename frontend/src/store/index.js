@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 const http = axios.create({
-  baseURL: 'https://www.wawasensei.dev/api/demo-auth/'
+  baseURL: 'https://localhost:3000/api/'
 });
 
 // let user = localStorage.getItems('user');
