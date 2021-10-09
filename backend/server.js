@@ -18,6 +18,7 @@ const normalizePort = val => {
   };
   const port = normalizePort(process.env.PORT || '3000');
   app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended : true }));
 
   app.set('port', port);
   app.use('/api/messages', messageRoutes);

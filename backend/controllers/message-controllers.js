@@ -20,7 +20,9 @@ export const getMessagesFromSingleUser = (req, res, next) => {
    
 }
 export const createMessage = (req, res, next) => {
-   
+    res.status(201).json({
+        message: 'Objet créé !'
+      });
 }
 export const updateMessage = (req, res, next) => {
    
