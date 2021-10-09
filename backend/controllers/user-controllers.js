@@ -1,6 +1,9 @@
 
 const users = [];
 export const signUp = (req, res, next) => {
+    db.query('SELECT * FROM users WHERE firstname = ?', [req.body.name], (err, result) => {
+        
+    })
     if (req.body.name) {
         let member = {
             name: req.body.name,
