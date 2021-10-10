@@ -1,4 +1,4 @@
-module.exports = (sequelize, DataTypes) => {
+const user = (sequelize, DataTypes) => {
     return sequelize.define('User', {
         id: {
             type: DataTypes.INTEGER, 
@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) => {
         password: {
             type: DataTypes.STRING, 
             allowNull: false
+        },
+        picture: {
+            type: DataTypes.STRING, 
+            allowNull: true
         }
     })
 }
+export default user; 
