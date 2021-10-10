@@ -13,8 +13,10 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
-    "mysql2": "^2.3.0",
-    "nodemon": "^2.0.13"
+    "mariadb": "^2.5.4",
+    "nodemon": "^2.0.13",
+    "promise-mysql": "^5.0.4",
+    "sequelize": "^6.7.0"
   },
   "type": "module",
   "devDependencies": {
