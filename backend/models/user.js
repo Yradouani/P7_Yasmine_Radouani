@@ -15,7 +15,10 @@ const user = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.STRING, 
-            allowNull: false
+            allowNull: false,
+            unique: {
+                msg: 'Adresse mail déjà utilisée !'
+            }
         },
         password: {
             type: DataTypes.STRING, 
