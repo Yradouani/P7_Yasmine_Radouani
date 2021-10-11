@@ -1,8 +1,33 @@
-const user = require ('../models/user.js')
 const { User } = require ('../sequelize.js')
+const fs = require ('fs')
+const bcrypt = require ('bcrypt')
+const jwt = require ('jsonwebtoken')
+const dotenv = require ('dotenv')
+dotenv.config()
 
-const users = [];
+// const users = [];
 exports.signUp = (req, res, next) => {
+    bcrypt.hash(req.body.password, 10)
+    .then(hash => {
+      console.log('En cours de création nouvel utilisateur')
+      
+      const user = new User({
+        email: req.body.email,
+        password: hash,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname, 
+        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+      });
+      console.log(user)
+      user.save()
+        .then(response => {
+            const message = 'Utilisateur créé !'
+            res.status(201).json({ message, response})
+        })
+        .catch(error => res.status(400).json({ error }));
+
+    })
+    .catch(error => res.status(500).json({ error }));
     // db.query('INSERT INTO users(firstname) VALUES ? AND', [req.body.firstname], (err, result) => {
     //     if (err) {
     //         res.json(error(err.message))
