@@ -13,12 +13,16 @@ const message = (sequelize, DataTypes) => {
             type: DataTypes.STRING, 
             allowNull: false
         },
-        picture: {
+        imageUrl: {
             type: DataTypes.STRING, 
             allowNull: true
         },
         content: {
             type: DataTypes.STRING, 
+            allowNull: false
+        },
+        userId: {
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     })
