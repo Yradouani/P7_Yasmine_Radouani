@@ -2,53 +2,11 @@ import express from 'express';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
-import mysql from 'promise-mysql';
-import { Sequelize } from 'sequelize'; 
-import DataTypes from 'sequelize';
-import MessageModel from './models/message.js'
-import UserModel from './models/user.js'
+// import mysql from 'promise-mysql';
+// import sequelize from './sequelize.js'
+// import initDb from './sequelize.js'
 
 const app = express();
-
-const sequelize = new Sequelize(
-  'api',
-  'yasmine',
-  process.env.DB,
-  {
-    host: 'localhost',
-    port: 3307,
-    dialect: 'mariadb',
-    dialectOptions: {
-      timezone: 'Etc/GMT-2'
-  },
-  logging: false
-}
-)
-
-sequelize.authenticate()
-  .then(_ => console.log('Connected to database'))
-  .catch(error => console.error(`Cannot connected to database ${error}`))
-
-const Message = MessageModel(sequelize, DataTypes)
-const User = UserModel(sequelize, DataTypes)
-
-sequelize.sync({force: true})
-  .then(_ => {
-    console.log('Database api synchronised')
-
-    // Modifier un message
-    messages.map(message => {
-      Message.create({
-        // content: req.body.content,
-        // picture: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        content: req.body.content,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname
-      }).then(Jacques => console.log('La base de donnée a bien été initialisée'))
-    })
-  })
-
-  .catch(error => console.error(`Cannot synchronised database ${error}`))
 
 app
   .use(helmet())
@@ -62,6 +20,40 @@ app
 
 dotenv.config()
 
+
+import { Sequelize } from 'sequelize'; 
+import DataTypes from 'sequelize';
+import MessageModel from './models/message.js'
+import UserModel from './models/user.js'
+
+    const sequelize = new Sequelize(
+        'api',
+        'yasmine',
+        process.env.DB,
+        {
+          host: 'localhost',
+          port: 3307,
+          dialect: 'mariadb',
+          dialectOptions: {
+            timezone: 'Etc/GMT-2'
+        },
+        logging: false
+      })
+      
+      sequelize.authenticate()
+        .then(_ => console.log('Connected to database'))
+        .catch(error => console.error(`Cannot connected to database ${error}`))
+      
+      export const Message = MessageModel(sequelize, DataTypes)
+      export const User = UserModel(sequelize, DataTypes)
+      
+      const initDb = () => {
+        sequelize.sync({force: true})
+        .then(_ => {
+          console.log('Database api synchronised')})
+        .catch(error => console.error(`Cannot synchronised database ${error}`))
+      }
+initDb()
 // mysql.createConnection({
 //   host: 'localhost',
 //   database: 'api',

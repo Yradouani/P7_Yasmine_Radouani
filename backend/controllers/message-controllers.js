@@ -1,34 +1,27 @@
-
-function success (result) {
-    return {
-        status: 'success',
-        result: result
-    }
-}
-
-function error (message) {
-    return {
-        status: 'error',
-        message: message
-    }
-}
+import Message from '../app.js'
 
 export const getAllMessages = (req, res, next) => {
-   db.query('SELECT * FROM messages', (err, result) => {
-       if (err) {
-           res.json(error(err.message))
-       } else {
-           res.json(succes(result))
-       }
-   })
+//    db.query('SELECT * FROM messages', (err, result) => {
+//        if (err) {
+//            res.json(error(err.message))
+//        } else {
+//            res.json(succes(result))
+//        }
+//    })
+    Message.findAll({})
+        .then(allMessages => res.status(200).json(allMessages))
+        .catch(error => res.status(400).json({ error }));
 }
 export const getMessagesFromSingleUser = (req, res, next) => {
    
 }
 export const createMessage = (req, res, next) => {
-    res.status(201).json({
-        message: 'Objet créé !'
-      });
+    Message.create(req.body)
+        .then(message => {
+            const note = `L'utilisateur ${req.body.firstname} ${req.body.lastname} a bien été créé.`
+            res.status(200).json(message, note)
+        })
+        .catch(error => res.status(400).json({ error }));
 }
 export const updateMessage = (req, res, next) => {
    
