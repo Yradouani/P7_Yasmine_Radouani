@@ -1,8 +1,8 @@
-import http from 'http';
-import app from './app.js';
-import bodyParser from "body-parser";
-import userRoutes from './routes/user.js';
-import messageRoutes from './routes/message.js';
+const http = require ('http');
+const app = require ('./app.js');
+const bodyParser = require ("body-parser");
+const userRoutes = require ('./routes/user.js');
+const messageRoutes = require ('./routes/message.js');
 
 
 const normalizePort = val => {

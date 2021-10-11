@@ -1,8 +1,8 @@
-import user from '../models/user.js'
-import User from '../app.js'
+const user = require ('../models/user.js')
+const { User } = require ('../sequelize.js')
 
 const users = [];
-export const signUp = (req, res, next) => {
+exports.signUp = (req, res, next) => {
     // db.query('INSERT INTO users(firstname) VALUES ? AND', [req.body.firstname], (err, result) => {
     //     if (err) {
     //         res.json(error(err.message))
@@ -21,14 +21,14 @@ export const signUp = (req, res, next) => {
     // })
 }
 
-export const logIn = (req, res, next) => {
+exports.logIn = (req, res, next) => {
     
 }
 
-export const getAllUsers = (req, res, next) => {
+exports.getAllUsers = (req, res, next) => {
    res
 }
-export const getOneUser = (req, res, next) => {
+exports.getOneUser = (req, res, next) => {
     // db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
     //     if (err) {
     //         res.json(error(err.message))
@@ -49,7 +49,7 @@ export const getOneUser = (req, res, next) => {
     
     .catch(error => res.status(404).json({ error }))
 }
-export const updateUser = (req, res, next) => {
+exports.updateUser = (req, res, next) => {
     if (req.body.firstname && req.body.lastname) {
         db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
             if (err) {
@@ -79,7 +79,7 @@ export const updateUser = (req, res, next) => {
     }
 }
 
-export const deleteUser = (req, res, next) => {
+exports.deleteUser = (req, res, next) => {
     db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
         if (err) {
             res.json(error(err.message))
@@ -98,20 +98,4 @@ export const deleteUser = (req, res, next) => {
 
         }
     })
-}
-
-
-
-function success (result) {
-    return {
-        status: 'success',
-        result: result
-    }
-}
-
-function error (message) {
-    return {
-        status: 'error',
-        message: message
-    }
 }

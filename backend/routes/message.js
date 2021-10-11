@@ -1,6 +1,6 @@
-import express from 'express';
+const express = require ('express');
 const router = express.Router();
-import {getAllMessages, getMessagesFromSingleUser, createMessage, updateMessage, deleteMessage, likeMessage} from './../controllers/message-controllers.js';
+const {getAllMessages, getMessagesFromSingleUser, createMessage, updateMessage, deleteMessage, likeMessage} = require ('./../controllers/message-controllers.js');
 
 router.get('/', getAllMessages);
 router.get('/:userId', getMessagesFromSingleUser);
@@ -12,4 +12,4 @@ router.post('/:id/like', likeMessage);
 
 
 
-export default router;
+module.exports = router;

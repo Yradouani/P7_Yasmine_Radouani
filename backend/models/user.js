@@ -27,4 +27,4 @@ const user = (sequelize, DataTypes) => {
         }
     })
 }
-export default user; 
+module.exports = user; 

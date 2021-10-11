@@ -23,4 +23,4 @@ const message = (sequelize, DataTypes) => {
         }
     })
 }
-export default message; 
+module.exports = message; 

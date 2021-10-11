@@ -1,6 +1,6 @@
-import Message from '../app.js'
+const { Message } = require ('../sequelize.js')
 
-export const getAllMessages = (req, res, next) => {
+exports.getAllMessages = (req, res, next) => {
 //    db.query('SELECT * FROM messages', (err, result) => {
 //        if (err) {
 //            res.json(error(err.message))
@@ -8,14 +8,15 @@ export const getAllMessages = (req, res, next) => {
 //            res.json(succes(result))
 //        }
 //    })
-    Message.findAll({})
+console.log(Message);
+    Message.findAll()
         .then(allMessages => res.status(200).json(allMessages))
         .catch(error => res.status(400).json({ error }));
 }
-export const getMessagesFromSingleUser = (req, res, next) => {
+exports.getMessagesFromSingleUser = (req, res, next) => {
    
 }
-export const createMessage = (req, res, next) => {
+exports.createMessage = (req, res, next) => {
     Message.create(req.body)
         .then(message => {
             const note = `L'utilisateur ${req.body.firstname} ${req.body.lastname} a bien été créé.`
@@ -23,10 +24,10 @@ export const createMessage = (req, res, next) => {
         })
         .catch(error => res.status(400).json({ error }));
 }
-export const updateMessage = (req, res, next) => {
+exports.updateMessage = (req, res, next) => {
    
 }
-export const deleteMessage = (req, res, next) => {
+exports.deleteMessage = (req, res, next) => {
     db.query('SELECT * FROM messages WHERE id = ?', [req.params.id], (err, result) => {
         if (err) {
             res.json(error(err.message))
@@ -46,6 +47,6 @@ export const deleteMessage = (req, res, next) => {
         }
     })
 }
-export const likeMessage = (req, res, next) => {
+exports.likeMessage = (req, res, next) => {
    
 }

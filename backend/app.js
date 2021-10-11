@@ -1,10 +1,9 @@
-import express from 'express';
-import helmet from 'helmet';
-import dotenv from 'dotenv';
-import morgan from 'morgan';
+const express = require ('express');
+const helmet = require ('helmet');
+const dotenv = require ('dotenv');
+const morgan = require ('morgan');
 // import mysql from 'promise-mysql';
-// import sequelize from './sequelize.js'
-// import initDb from './sequelize.js'
+const sequelize = require ('./sequelize.js')
 
 const app = express();
 
@@ -19,41 +18,8 @@ app
   });
 
 dotenv.config()
+sequelize.initDb()
 
-
-import { Sequelize } from 'sequelize'; 
-import DataTypes from 'sequelize';
-import MessageModel from './models/message.js'
-import UserModel from './models/user.js'
-
-    const sequelize = new Sequelize(
-        'api',
-        'yasmine',
-        process.env.DB,
-        {
-          host: 'localhost',
-          port: 3307,
-          dialect: 'mariadb',
-          dialectOptions: {
-            timezone: 'Etc/GMT-2'
-        },
-        logging: false
-      })
-      
-      sequelize.authenticate()
-        .then(_ => console.log('Connected to database'))
-        .catch(error => console.error(`Cannot connected to database ${error}`))
-      
-      export const Message = MessageModel(sequelize, DataTypes)
-      export const User = UserModel(sequelize, DataTypes)
-      
-      const initDb = () => {
-        sequelize.sync({force: true})
-        .then(_ => {
-          console.log('Database api synchronised')})
-        .catch(error => console.error(`Cannot synchronised database ${error}`))
-      }
-initDb()
 // mysql.createConnection({
 //   host: 'localhost',
 //   database: 'api',
@@ -75,4 +41,4 @@ initDb()
 // })
 
 
-export default app;
+module.exports = app;

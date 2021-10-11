@@ -1,7 +1,6 @@
-import { Sequelize } from 'sequelize'; 
-import DataTypes from 'sequelize';
-import MessageModel from './models/message.js'
-import UserModel from './models/user.js'
+const { Sequelize, DataTypes } = require ('sequelize'); 
+const MessageModel = require ('./models/message.js')
+const UserModel = require ('./models/user.js')
 
     const sequelize = new Sequelize(
         'api',
@@ -27,26 +26,11 @@ import UserModel from './models/user.js'
       const initDb = () => {
         sequelize.sync({force: true})
         .then(_ => {
-          console.log('Database api synchronised')
-      
-          // Modifier un message
-          // messages.map(message => {
-            Message.create({
-              // content: req.body.content,
-              // picture: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-            //   content: req.body.content,
-            //   firstname: req.body.firstname,
-            //   lastname: req.body.lastname
-            content: 'Bonjour à tous',
-            firstname: 'Julie',
-            lastname: 'Fournier'
-            }).then(Jacques => console.log('La base de donnée a bien été initialisée'))
-          })
-        // })
-      
+          console.log('Database api synchronised')})
         .catch(error => console.error(`Cannot synchronised database ${error}`))
       }
 
 
-    
-export default initDb;
+          module.exports = {
+            initDb, Message, User
+          }
