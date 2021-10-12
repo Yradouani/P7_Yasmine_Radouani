@@ -15,8 +15,15 @@ console.log(Message);
         .catch(error => res.status(400).json({ error }));
 }
 exports.getMessagesFromSingleUser = (req, res, next) => {
-   
+    Message.findByPk({userId : req.params.userId})
+    .then(user => {
+        const message = `Voici les messages de l'utilisateur`
+        res.status(200).json({user, message})
+    })
+    
+    .catch(error => res.status(404).json({ error }))
 }
+
 exports.createMessage = (req, res, next) => {
     const message = new Message({
         firstname: req.body.firstname,

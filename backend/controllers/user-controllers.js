@@ -5,7 +5,7 @@ const jwt = require ('jsonwebtoken')
 const dotenv = require ('dotenv')
 dotenv.config()
 
-// const users = [];
+// Création d'un compte utilisateur
 exports.signUp = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
@@ -46,6 +46,7 @@ exports.signUp = (req, res, next) => {
     // })
 }
 
+// Connection au compte utilisateur
 exports.logIn = (req, res, next) => {
     User.findOne({ where: { email: req.body.email } })
     .then(user => {
@@ -58,9 +59,9 @@ exports.logIn = (req, res, next) => {
             return res.status(401).json({ error: 'Mot de passe incorrect !' });
           }
           res.status(200).json({
-            userId: user._id,
+            userId: user.userId,
             token: jwt.sign(
-                { userId: user._id },
+                { userId: user.userId },
               process.env.TOKEN,
               { expiresIn: '24h' }
             )
@@ -74,6 +75,8 @@ exports.logIn = (req, res, next) => {
 exports.getAllUsers = (req, res, next) => {
    res
 }
+
+// 
 exports.getOneUser = (req, res, next) => {
     // db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
     //     if (err) {
@@ -87,7 +90,7 @@ exports.getOneUser = (req, res, next) => {
 
     //     }
     // })
-    User.findByPk({_id : req.params.id})
+    User.findByPk({userId : req.params.userId})
     .then(user => {
         const message = 'Utilisateur trouvé'
         res.status(200).json({user, message})
@@ -96,12 +99,12 @@ exports.getOneUser = (req, res, next) => {
     .catch(error => res.status(404).json({ error }))
 }
 exports.updateUser = (req, res, next) => {
-    const id = req.params.id
+    const userId = req.params.userId
     User.update(req.body, {
-       where: { id: id }
+       where: { userId: userId }
    })
    .then(_ => {
-       User.findByPk(id)
+       User.findByPk(userId)
         .then(response => {
             const message = 'Utilisateur modifié !'
             res.status(201).json({ message, response})
@@ -139,11 +142,11 @@ exports.updateUser = (req, res, next) => {
 }
 
 exports.deleteUser = (req, res, next) => {
-    User.findByPk({ id: req.params.id })
+    User.findByPk({ userId: req.params.userId })
     .then(user => {
       const filename = user.imageUrl.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
-        User.destroy({ where: { id: req.params.id } })
+        User.destroy({ where: { userId: req.params.userId } })
             .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
             .catch(error => res.status(400).json({ error }));
       });

@@ -112,6 +112,14 @@ export default {
       }), function (error) {
         console.log(error);
       }
+
+      // ------
+      // await fetch('http://localhost:3000/api/auth/signup', {
+      //   method: 'POST',
+      //   headers: {'Content-Type': 'application/json'},
+      //   body: JSON.stringify(this.firstname, this.lastname, this.email, this.password)
+      // })
+      // -------
     },
     login: function (){
       const self = this;

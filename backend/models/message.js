@@ -24,7 +24,17 @@ const message = (sequelize, DataTypes) => {
         userId: {
             type: DataTypes.INTEGER,
             allowNull: false
-        }
+        },
+        likes : {
+            type: DataTypes.INTEGER, 
+            default: 0,
+            allowNull: true
+        },
+        dislikes : {
+            type: DataTypes.INTEGER, 
+            default: 0,
+            allowNull: true
+        },
     })
 }
 module.exports = message; 

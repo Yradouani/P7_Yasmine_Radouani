@@ -4,6 +4,7 @@ const http = axios.create({
   baseURL: 'https://localhost:3000/api/'
 });
 
+// --------
 // let user = localStorage.getItems('user');
 // if (!user) {
 //     user = {
@@ -22,6 +23,7 @@ const http = axios.create({
 //     }
     
 // }
+// -------
 
 const store = createStore ({
     state : {
@@ -58,7 +60,7 @@ const store = createStore ({
         createAccount: ({commit}, user) => {
             return new Promise((resolve, reject) => {
                 commit;
-                http.post('/createAccount', user)
+                http.post('/signup', user)
                 .then(function (response) {
                     commit('setStatus', 'created');
                     resolve(response);
@@ -87,7 +89,7 @@ const store = createStore ({
             })
         },
         getUserInfos: ({commit}) => {
-            http.post('/infos')
+            http.post('/users/:userid')
                 .then(function (response) {
                     commit('userInfos', response.data.infos);
                 })
