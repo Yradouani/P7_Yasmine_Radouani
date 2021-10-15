@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import axios from 'axios';
 const http = axios.create({
-  baseURL: 'https://localhost:3000/api/'
+  baseURL: 'https://localhost:3000/api/auth'
 });
 
 // --------
