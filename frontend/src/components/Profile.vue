@@ -25,6 +25,7 @@
 </template>
 
 <script>
+// import axios from 'axios'
 export default {
   name: 'profile',
   mounted: function () {
@@ -33,7 +34,14 @@ export default {
       this.$router.push('/');
       return;
     }
-    this.$store.dispatch('getUserInfos');
+    // this.$store.dispatch('getUserInfos');
+
+    // axios.get('http://localhost:3000/api/users/:userid')
+    //   .then(function(response){
+    //     if(response.ok){
+    //         return response.json();
+    //     }  
+    //   })
   }
 
 };

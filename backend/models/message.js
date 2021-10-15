@@ -7,11 +7,11 @@ const message = (sequelize, DataTypes) => {
         },
         firstname: {
             type: DataTypes.STRING, 
-            allowNull: false
+            allowNull: true
         },
         lastname: {
             type: DataTypes.STRING, 
-            allowNull: false
+            allowNull: true
         },
         imageUrl: {
             type: DataTypes.STRING, 
@@ -23,7 +23,7 @@ const message = (sequelize, DataTypes) => {
         },
         userId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: true
         },
         likes : {
             type: DataTypes.INTEGER, 

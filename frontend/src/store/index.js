@@ -3,6 +3,12 @@ import axios from 'axios';
 const http = axios.create({
   baseURL: 'http://localhost:3000/api/auth'
 });
+const request = axios.create({
+    baseURL: 'http://localhost:3000/api'
+  });
+// const message = axios.create({
+//     baseURL: 'http://localhost:3000/api/messages'
+//   });
 
 // --------
 // let user = localStorage.getItems('user');
@@ -37,7 +43,7 @@ const store = createStore ({
             firstname: '',
             lastname: '',
             email: '',
-            picture: '',
+            imageUrl: '',
         }
     },
     getters : {
@@ -89,14 +95,27 @@ const store = createStore ({
             })
         },
         getUserInfos: ({commit}) => {
-            http.post('/users/:userid')
+            request.post('/users/:userid')
                 .then(function (response) {
                     commit('userInfos', response.data.infos);
                 })
-                .catch(function (){
-
-                });
-        }
+                .catch(error => console.log(error))
+        },
+        // sendMessage: ({commit}, post) => {
+        //     return new Promise((resolve, reject) => {
+        //         commit;
+        //         message.post('/', post)
+        //         .then(function (response) {
+        //             commit('setStatus', 'created');
+        //             resolve(response);
+        //         })
+        //         .catch(function (error){
+        //             commit('setStatus', 'error_create');
+        //             reject(error);
+        //         });
+        //         console.log(user);
+        //     })
+        // },
     },
     modules : {
         

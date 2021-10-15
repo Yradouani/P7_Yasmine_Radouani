@@ -14,16 +14,17 @@
   <h1>Bienvenue dans le forum</h1>
   <div id="message_container">
   <span>Exprimez-vous !</span>
-  <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="newMessage" @keypress.enter="sendMessage"/>
+  <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="content" @keypress.enter="sendMessage"/>
   <div id="button_container">
-    <button id="add-picture">Ajouter une image</button>
+    <input type="file" @change="onFileSelected" id="add-picture">
+    <button @click="onUpload">Ajouter mon image</button>
     <button id="send-message" @click="sendMessage" >Publier mon message</button>
   </div>
   </div>
 
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
-      <span>{{ singleMessage.message }}</span>
+      <span>{{ singleMessage.content }}</span>
       <div>
       <span id="trash" @click="deleteMessage(singleMessage)"><i class="fas fa-trash-alt" ></i></span>
       <span id="update" @click="updateMessage(singleMessage)"><i class="fas fa-edit"></i></span>
@@ -37,52 +38,134 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+// import { ref } from 'vue';
+// import store from '@/store/index.js'
+import axios from 'axios';
 export default {
-  setup(props, ctx) {
-
-    let newMessage = ref("");
-    let allMessages = ref([]);
-    const sendMessage = function () {
-      console.log(newMessage.value);
-      ctx.emit("addNewMessage", newMessage.value);
-      allMessages.value = [...allMessages.value, { message: newMessage.value, id: Date.now() }];
-      console.log(allMessages.value);
-      newMessage.value = "";
-    };
-    const deleteMessage = function (singleMessage) {
-      ctx.emit('delete-message', singleMessage);
-      console.log(singleMessage);
-      allMessages.value = allMessages.value.filter(m => m.id !== singleMessage.id);
-
-    };
-    let messageToUpdate = ref(null);
-    const updateMessage = function (singleMessage) {
-        messageToUpdate.value = singleMessage;
-    };
-    let save = function () {
-        messageToUpdate.value = null;
-    };
-    const validatedFields = function () {
-        newMessage.value != '';
-    };
+  name: 'profile',
+  mounted: function () {
+    // console.log(this.$store.state.user);
+    // if (this.$store.state.user.userId == -1) {
+    //   this.$router.push('/');
+    //   return;
+    // }
+    // this.$store.dispatch('getUserInfos');
+    axios.get('http://localhost:3000/api/messages')
+      .then(response => this.allMessages = response.data)
+      .catch(error => console.log(error))
+  },
+  data() {
     return {
-      newMessage,
-      sendMessage,
-      allMessages,
-      deleteMessage,
-      updateMessage,
-      save,
-      messageToUpdate,
-      validatedFields,
+      content: "",
+      allMessages: '[]',
+      selectedFile: "",
+      messageToUpdate: "",
     };
+  },
+  methods: {
+      sendMessage: function () {
+        console.log(this.content);
+      // ctx.emit("addNewMessage", this.content);
+      this.allMessages = [...this.allMessages, { message: this.content, id: Date.now() }];
+      console.log(this.allMessages);
+      axios.post('http://localhost:3000/api/messages', {"content": this.content})
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.log(error))
+      // store.dispatch('sendMessage', allMessages.value)
+      this.content = "";
+      },
+      deleteMessage: function (singleMessage) {
+          let self = this;
+          console.log(singleMessage);
+          this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
+      },
+      onFileSelected: function (e) {
+        this.selectedFile = e.target.files[0];
+      },
+      updateMessage: function (singleMessage) {
+          this.messageToUpdate = singleMessage;
+      },
+      save: function () {
+        this.messageToUpdate = null;
+      },
+      validatedFields: function () {
+        this.content != '';
+      }
+
   }
+
 };
+// export default {
+//   setup(props, ctx) {
+
+//     let content = ref("");
+//     let allMessages = ref([]);
+//     // let imageUrl = ref
+
+//     const sendMessage = function () {
+//       console.log(content.value);
+//       ctx.emit("addNewMessage", content.value);
+//       allMessages.value = [...allMessages.value, { message: content.value, id: Date.now() }];
+//       console.log(allMessages.value);
+//       axios.post('http://localhost:3000/api/messages', content.value)
+//         .then(response => {
+//           console.log(response);
+//         })
+//         .catch(error => {
+//           console.log(error);
+//         })
+//       // store.dispatch('sendMessage', allMessages.value)
+//       content.value = "";
+//     };
+//     const deleteMessage = function (singleMessage) {
+//       ctx.emit('delete-message', singleMessage);
+//       console.log(singleMessage);
+//       allMessages.value = allMessages.value.filter(m => m.id !== singleMessage.id);
+
+//     };
+//     let selectedFile = null;
+//     const onFileSelected = function (e) {
+//         selectedFile.value = e.target.files[0];
+//     };
+//     const onUpload = function () {
+
+//     };
+//     let messageToUpdate = ref(null);
+//     const updateMessage = function (singleMessage) {
+//         messageToUpdate.value = singleMessage;
+//     };
+//     let save = function () {
+//         messageToUpdate.value = null;
+//     };
+//     const validatedFields = function () {
+//         content.value != '';
+//     };
+//     return {
+//       content,
+//       sendMessage,
+//       allMessages,
+//       deleteMessage,
+//       updateMessage,
+//       save,
+//       messageToUpdate,
+//       validatedFields,
+//       onFileSelected,
+//       selectedFile,
+//       onUpload
+//     };
+//   }
+// };
 </script>
 
 <style scoped>
 body{
-  background-image: url(../assets/e96669f09c136d4598a04830d9874ad5.jpg);
+
+}
+#background-image {
+  width: 100%;
+  height: 100%;
 }
 #app{
   background-color: white;
