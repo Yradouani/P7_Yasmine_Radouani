@@ -12,11 +12,12 @@ const path = require ('path');
 // const { fileURLToPath }= require ('url');
 
 const app = express();
+app.options('*', cors())
 app
   .use(helmet())
   .use('/images', express.static(path.join(__dirname, 'images')))
   .use(morgan('dev'))
-  .use(cors())
+  .use(cors({origin: true}))
   .use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
