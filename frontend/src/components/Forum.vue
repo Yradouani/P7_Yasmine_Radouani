@@ -1,8 +1,6 @@
 <template>
   <div id="header-container">
-    <router-link to="/">
-      <button id="logout">Se déconnecter</button>
-    </router-link>
+      <button id="logout" @click="logout()">Se déconnecter</button>
     <img src="../assets/logo.png" alt="logo" id="logo" >
     <router-link to="/profile">
       <div id="profile-container">
@@ -109,6 +107,10 @@ export default {
       },
       validatedFields: function () {
         this.content != '';
+      },
+      logout: function () {
+        this.$store.commit('logout');
+        this.$router.push('/');
       }
 
   },
