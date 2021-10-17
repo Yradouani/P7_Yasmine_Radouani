@@ -80,18 +80,22 @@ export default {
       sendMessage: function () {
         console.log(this.content);
       // ctx.emit("addNewMessage", this.content);
-      this.allMessages = [...this.allMessages, { message: this.content, id: Date.now() }];
+      this.allMessages = [...this.allMessages, { message: this.content}];
       console.log(this.allMessages);
       axios.post('http://localhost:3000/api/messages', {"content": this.content})
         .then(response => {
           console.log(response);
         })
         .catch(error => console.log(error))
-      // store.dispatch('sendMessage', allMessages.value)
+      axios.get('http://localhost:3000/api/messages')
+      .then((response) => {
+        this.allMessages = response.data
+        })
+      .catch(error => console.log(error))
       this.content = "";
       },
       deleteMessage: function (singleMessage) {
-          // let self = this;
+          let self = this;
           console.log(singleMessage);
           axios.delete(`http://localhost:3000/api/messages/${singleMessage.id}`)
               .then(response => {
