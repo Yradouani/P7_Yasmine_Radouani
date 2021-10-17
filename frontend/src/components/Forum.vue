@@ -58,7 +58,9 @@ export default {
     this.$store.dispatch('getUserInfos');
 
     axios.get('http://localhost:3000/api/messages')
-      .then(response => this.allMessages = response.data)
+      .then((response) => {
+        this.allMessages = response.data
+        })
       .catch(error => console.log(error))
   },
   computed: {
@@ -89,16 +91,15 @@ export default {
       this.content = "";
       },
       deleteMessage: function (singleMessage) {
-          let self = this;
+          // let self = this;
           console.log(singleMessage);
           axios.delete(`http://localhost:3000/api/messages/${singleMessage.id}`)
               .then(response => {
+                  this.message = response;
                   this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
                   console.log('Message effacé')
               })
               .catch(error => console.log(error))
-
-          // this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
       },
       onFileSelected: function (e) {
         this.selectedFile = e.target.files[0];

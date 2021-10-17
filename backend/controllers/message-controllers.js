@@ -2,17 +2,10 @@ const { Message } = require ('../sequelize.js')
 const fs = require ('fs')
 
 exports.getAllMessages = (req, res, next) => {
-//    db.query('SELECT * FROM messages', (err, result) => {
-//        if (err) {
-//            res.json(error(err.message))
-//        } else {
-//            res.json(succes(result))
-//        }
-//    })
-console.log(Message);
-    Message.findAll()
-        .then(allMessages => res.status(200).json(allMessages))
-        .catch(error => res.status(400).json({ error }));
+    console.log(Message);
+        Message.findAll()
+            .then(allMessages => res.status(200).json(allMessages))
+            .catch(error => res.status(400).json({ error }));
 }
 exports.getMessagesFromSingleUser = (req, res, next) => {
     Message.findByPk({userId : req.params.userId})
@@ -71,34 +64,19 @@ exports.updateMessage = (req, res, next) => {
 }
 
 exports.deleteMessage = (req, res, next) => {
-    Message.findByPk({ id: req.params.id })
-    .then(message => {
-      const filename = message.imageUrl.split('/images/')[1];
-      fs.unlink(`images/${filename}`, () => {
-        Message.destroy({ where: { id: req.params.id } })
-            .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
-            .catch(error => res.status(400).json({ error }));
-      });
-    })
-    .catch(error => res.status(400).json({ error }))
-    // db.query('SELECT * FROM messages WHERE id = ?', [req.params.id], (err, result) => {
-    //     if (err) {
-    //         res.json(error(err.message))
-    //     } else {
-    //         if (result[0] != undefined) {
-    //             db.query('DELETE FROM messages WHERE id = ?', [req.params.id], (err, result) => {
-    //                 if (err) {
-    //                     res.json(error(err.message))
-    //                 } else {
-    //                     res.json(success(true))
-    //                 }
-    //             })
-    //         } else {
-    //             res.json(error('Wrong id'))
-    //         }
-
-    //     }
+    // Message.findOne({where : { id: req.params.id }})
+    // .then(message => {
+    //   const filename = message.imageUrl.split('/images/')[1];
+    //   fs.unlink(`images/${filename}`, () => {
+    //     Message.destroy({ where: { id: req.params.id } })
+    //         .then(() => res.status(200).json({ message: 'Message supprimé !'}))
+    //         .catch(error => res.status(400).json({ error }));
+    //   });
     // })
+    // .catch(error => res.status(400).json({ error }))
+    Message.destroy({where : { id: req.params.id }})
+        .then(() => res.status(200).json({ message: 'Message supprimé !'}))
+        .catch(error => res.status(400).json({ error }));
 }
 exports.likeMessage = (req, res, next) => {
    
