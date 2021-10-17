@@ -3,42 +3,38 @@ import axios from 'axios';
 const http = axios.create({
   baseURL: 'http://localhost:3000/api/auth'
 });
-const request = axios.create({
-    baseURL: 'http://localhost:3000/api'
-  });
-// const message = axios.create({
-//     baseURL: 'http://localhost:3000/api/messages'
+// const request = axios.create({
+//     baseURL: 'http://localhost:3000/api'
 //   });
 
 // --------
-// let user = localStorage.getItems('user');
-// if (!user) {
-//     user = {
-//         userId: -1,
-//         token: '',
-//     };
-// }else {
-//     try {
-//         user = JSON.parse(user);
-//         instance.defaults.headers.common['Authorization'] = user.token;
-//     }catch (ex){
-//         user = {
-//         userId: -1,
-//         token: '',
-//     };
-//     }
+let user = localStorage.getItem('user');
+if (!user) {
+    user = {
+        userId: -1,
+        token: '',
+    };
+}else {
+    try {
+        user = JSON.parse(user);
+        http.defaults.headers.common['Authorization'] = user.token;
+    }catch (ex){
+        user = {
+        userId: -1,
+        token: '',
+    };
+    }
     
-// }
-// -------
+}
 
 const store = createStore ({
     state : {
         status: '',
-        // user: user,
-        user: {
-            userId: -1,
-            token: '',
-        },
+        user: user,
+        // user: {
+        //     userId: -1,
+        //     token: '',
+        // },
         userInfos: {
             firstname: '',
             lastname: '',
@@ -55,7 +51,7 @@ const store = createStore ({
         },
         logUser: function (state, user) {
             http.defaults.headers.common['Authorization'] = user.token;
-            // localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('user', JSON.stringify(user));
             state.user = user;
         },
         userInfos: function (state, userInfos) {
@@ -95,12 +91,21 @@ const store = createStore ({
             })
         },
         getUserInfos: ({commit}) => {
-            request.post('/users/:userid')
+            var user = JSON.parse(localStorage.getItem('user'));
+            console.log(user);
+            axios.get(`http://localhost:3000/api/users/${user.userId}`)
                 .then(function (response) {
-                    commit('userInfos', response.data.infos);
+                    console.log(response.data.user)
+                    commit('userInfos', response.data.user);
                 })
                 .catch(error => console.log(error))
-        },
+            }
+            // request.get('/users')
+            //     .then(function (response) {
+            //         commit('userInfos', response.data);
+            //     })
+            //     .catch(error => console.log(error))
+
         // sendMessage: ({commit}, post) => {
         //     return new Promise((resolve, reject) => {
         //         commit;

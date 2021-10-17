@@ -11,7 +11,7 @@
       </div>
     </router-link>
   </div>
-  <h1>Bienvenue dans le forum</h1>
+  <h1>Bienvenue dans le forum {{ user.firstname }}</h1>
   <div id="message_container">
   <span>Exprimez-vous !</span>
   <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="content" @keypress.enter="sendMessage"/>
@@ -53,6 +53,13 @@ export default {
     axios.get('http://localhost:3000/api/messages')
       .then(response => this.allMessages = response.data)
       .catch(error => console.log(error))
+
+
+    var user = JSON.parse(localStorage.getItem('user'));
+            console.log(user);
+            axios.get(`http://localhost:3000/api/users/${user.userId}`)
+                .then(response => this.user = response.data.user)
+                .catch(error => console.log(error))
   },
   data() {
     return {
@@ -60,6 +67,10 @@ export default {
       allMessages: '[]',
       selectedFile: "",
       messageToUpdate: "",
+      user: {
+        firstname: "",
+        lastname: "",
+      },
     };
   },
   methods: {

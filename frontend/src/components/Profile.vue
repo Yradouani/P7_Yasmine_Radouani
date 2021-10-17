@@ -5,11 +5,11 @@
       <span>Accéder au forum</span>
     </div>
   </router-link>
-  <h1>Bienvenu sur votre profil</h1>
+  <h1>Bienvenu sur votre profil {{ user.firstname }} !</h1>
   <div id="profil-container">
     <div id="first-last-name">
-      <span>Nom</span>
-      <span>Prénom</span>
+      <span>Nom : {{ user.lastname }}</span>
+      <span>Prénom : {{ user.firstname }}</span>
     </div>
     <div id="image-container">
       <img src="../assets/depositphotos.jpg" alt="">
@@ -25,26 +25,41 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios'
 export default {
   name: 'profile',
   mounted: function () {
-    console.log(this.$store.state.user);
-    if (this.$store.state.user.userId == -1) {
-      this.$router.push('/');
-      return;
-    }
+      var user = JSON.parse(localStorage.getItem('user'));
+            console.log(user);
+            axios.get(`http://localhost:3000/api/users/${user.userId}`)
+                .then(response => this.user = response.data.user)
+                .catch(error => console.log(error))
+  },
+  data() {
+    return {
+      user: {
+        firstname: "",
+        lastname: "",
+      },
+    };
+  },
+
+
+    // console.log(this.$store.state.user);
+    // if (this.$store.state.user.userId == -1) {
+    //   this.$router.push('/');
+    //   return;
+    // }
     // this.$store.dispatch('getUserInfos');
 
-    // axios.get('http://localhost:3000/api/users/:userid')
-    //   .then(function(response){
-    //     if(response.ok){
-    //         return response.json();
-    //     }  
-    //   })
+
+  //     .then(function () {
+  //         console.log('Récupération des infos');
+  //     }), function (error) {
+  //       console.log(error);
+  //     }
   }
 
-};
 </script>
 
 <style scoped>

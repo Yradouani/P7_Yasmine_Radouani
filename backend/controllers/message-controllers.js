@@ -29,7 +29,6 @@ exports.createMessage = (req, res, next) => {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         imageUrl: req.body.imageUrl,
-        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         content: req.body.content,
         userId: req.body.userId
       });
@@ -40,12 +39,20 @@ exports.createMessage = (req, res, next) => {
           res.status(201).json({ message, response})
       })
       .catch(error => res.status(400).json({ error }));
-    // Message.create(req.body)
-    //     .then(message => {
-    //         const note = `Votre message a bien été créé.`
-    //         res.status(200).json(message, note)
-    //     })
-    //     .catch(error => res.status(400).json({ error }));
+
+
+    // const messageObject = JSON.parse(req.body.message);
+    // const message = new Message({
+    //     ...messageObject,
+    //     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    //   });
+
+    // message.save()
+    //   .then(response => {
+    //       const message = 'Message enregistré !'
+    //       res.status(201).json({ message, response})
+    //   })
+    //   .catch(error => res.status(400).json({ error }));
 }
 exports.updateMessage = (req, res, next) => {
    const id = req.params.id

@@ -71,32 +71,37 @@ exports.logIn = (req, res, next) => {
     })
     .catch(error => res.status(500).json({ error }));
 }
+// exports.userInfos = (req, res, next) => {
+//   const user = new Message({
+//     firstname: req.body.firstname,
+//     lastname: req.body.lastname,
+//     imageUrl: req.body.imageUrl,
+//     content: req.body.content,
+//     userId: req.body.userId
+//   });
+
+// message.save()
+//   .then(response => {
+//       const message = 'Message enregistré !'
+//       res.status(201).json({ message, response})
+//   })
+//   .catch(error => res.status(400).json({ error }));
+// }
 
 exports.getAllUsers = (req, res, next) => {
-   res
+  User.findAll()
+  .then(allUsers => res.status(200).json(allUsers))
+  .catch(error => res.status(400).json({ error }));
 }
 
 // 
 exports.getOneUser = (req, res, next) => {
-    // db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
-    //     if (err) {
-    //         res.json(error(err.message))
-    //     } else {
-    //         if (result[0] != undefined) {
-    //             res.json(succes(result))
-    //         } else {
-    //             res.json(error('Wrong id'))
-    //         }
-
-    //     }
-    // })
-    User.findByPk({userId : req.params.userId})
-    .then(user => {
-        const message = 'Utilisateur trouvé'
-        res.status(200).json({user, message})
-    })
-    
-    .catch(error => res.status(404).json({ error }))
+    User.findOne({userId : req.params.userId})
+        .then(user => {
+            const message = 'Utilisateur trouvé'
+            res.status(200).json({user, message})
+        })
+        .catch(error => res.status(404).json({ error }))
 }
 exports.updateUser = (req, res, next) => {
     const userId = req.params.userId
@@ -104,7 +109,7 @@ exports.updateUser = (req, res, next) => {
        where: { userId: userId }
    })
    .then(_ => {
-       User.findByPk(userId)
+       User.findOne(userId)
         .then(response => {
             const message = 'Utilisateur modifié !'
             res.status(201).json({ message, response})
