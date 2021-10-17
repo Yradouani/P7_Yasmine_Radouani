@@ -41,25 +41,31 @@
 // import { ref } from 'vue';
 // import store from '@/store/index.js'
 import axios from 'axios';
+import { mapState } from 'vuex';
 export default {
   name: 'profile',
   mounted: function () {
-    // console.log(this.$store.state.user);
-    // if (this.$store.state.user.userId == -1) {
-    //   this.$router.push('/');
-    //   return;
-    // }
-    // this.$store.dispatch('getUserInfos');
+    console.log(this.$store.state.user);
+    if (this.$store.state.user.userId == -1) {
+      this.$router.push('/');
+      return;
+    }
+    this.$store.dispatch('getUserInfos');
+
     axios.get('http://localhost:3000/api/messages')
       .then(response => this.allMessages = response.data)
       .catch(error => console.log(error))
-
-
-    var user = JSON.parse(localStorage.getItem('user'));
-            console.log(user);
-            axios.get(`http://localhost:3000/api/users/${user.userId}`)
-                .then(response => this.user = response.data.user)
-                .catch(error => console.log(error))
+  },
+    // var user = JSON.parse(localStorage.getItem('user'));
+    //         console.log(user);
+    //         axios.get(`http://localhost:3000/api/users/${user.userId}`)
+    //             .then(response => this.user = response.data.user)
+    //             .catch(error => console.log(error))
+  
+  computed: {
+    ...mapState({
+      user: 'userInfos',
+    })
   },
   data() {
     return {
@@ -67,10 +73,10 @@ export default {
       allMessages: '[]',
       selectedFile: "",
       messageToUpdate: "",
-      user: {
-        firstname: "",
-        lastname: "",
-      },
+      // user: {
+      //   firstname: "",
+      //   lastname: "",
+      // },
     };
   },
   methods: {
@@ -105,7 +111,7 @@ export default {
         this.content != '';
       }
 
-  }
+  },
 
 };
 // export default {

@@ -25,32 +25,44 @@
 </template>
 
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import {mapState} from 'vuex';
 export default {
   name: 'profile',
   mounted: function () {
-      var user = JSON.parse(localStorage.getItem('user'));
-            console.log(user);
-            axios.get(`http://localhost:3000/api/users/${user.userId}`)
-                .then(response => this.user = response.data.user)
-                .catch(error => console.log(error))
+      console.log(this.$store.state.user);
+    if (this.$store.state.user.userId == -1) {
+      this.$router.push('/');
+      return;
+    }
+    this.$store.dispatch('getUserInfos');
   },
-  data() {
-    return {
-      user: {
-        firstname: "",
-        lastname: "",
-      },
-    };
-  },
+  computed: {
+    ...mapState({
+      user: 'userInfos',
+    })
+  }
+}
 
 
-    // console.log(this.$store.state.user);
-    // if (this.$store.state.user.userId == -1) {
-    //   this.$router.push('/');
-    //   return;
-    // }
-    // this.$store.dispatch('getUserInfos');
+
+  //     var user = JSON.parse(localStorage.getItem('user'));
+  //           console.log(user);
+  //           axios.get(`http://localhost:3000/api/users/${user.userId}`)
+  //               .then(response => this.user = response.data.user)
+  //               .catch(error => console.log(error))
+  // },
+  // data() {
+  //   return {
+  //     user: {
+  //       firstname: "",
+  //       lastname: "",
+  //     },
+  //   };
+  // },
+
+
+    
 
 
   //     .then(function () {
@@ -58,7 +70,7 @@ export default {
   //     }), function (error) {
   //       console.log(error);
   //     }
-  }
+
 
 </script>
 
