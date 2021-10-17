@@ -96,7 +96,7 @@ exports.getAllUsers = (req, res, next) => {
 
 // 
 exports.getOneUser = (req, res, next) => {
-    User.findOne({userId : req.params.userId})
+    User.findOne( {where: {userId : req.params.userId}})
         .then(user => {
             const message = 'Utilisateur trouvé'
             res.status(200).json({user, message})

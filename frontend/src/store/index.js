@@ -56,6 +56,13 @@ const store = createStore ({
         },
         userInfos: function (state, userInfos) {
             state.userInfos = userInfos;
+        },
+        logout: function (state) {
+            state.user = {
+                userId: -1,
+                token: '',
+            }
+            localStorage.removeItem('user');
         }
     },
     actions : {
@@ -93,6 +100,7 @@ const store = createStore ({
         getUserInfos: ({commit}) => {
             var user = JSON.parse(localStorage.getItem('user'));
             console.log(user);
+            console.log(user.userId);
             axios.get(`http://localhost:3000/api/users/${user.userId}`)
                 .then(function (response) {
                     console.log(response.data.user)

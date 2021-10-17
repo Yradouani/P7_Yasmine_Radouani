@@ -16,9 +16,7 @@
     </div>
     <div id="buttons">
       <button id="update-profile">Modifier mon profil</button>
-      <router-link to="/">
-        <button id="logout">Se déconnecter</button>
-      </router-link>
+      <button id="logout" @click="logout()">Se déconnecter</button>
     </div>
   </div>
   
@@ -41,37 +39,14 @@ export default {
     ...mapState({
       user: 'userInfos',
     })
+  },
+  methods: {
+    logout: function () {
+      this.$store.commit('logout');
+      this.$router.push('/');
+    }
   }
 }
-
-
-
-  //     var user = JSON.parse(localStorage.getItem('user'));
-  //           console.log(user);
-  //           axios.get(`http://localhost:3000/api/users/${user.userId}`)
-  //               .then(response => this.user = response.data.user)
-  //               .catch(error => console.log(error))
-  // },
-  // data() {
-  //   return {
-  //     user: {
-  //       firstname: "",
-  //       lastname: "",
-  //     },
-  //   };
-  // },
-
-
-    
-
-
-  //     .then(function () {
-  //         console.log('Récupération des infos');
-  //     }), function (error) {
-  //       console.log(error);
-  //     }
-
-
 </script>
 
 <style scoped>
