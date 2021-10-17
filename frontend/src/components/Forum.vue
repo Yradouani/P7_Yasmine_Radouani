@@ -22,10 +22,17 @@
 
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
-      <span>{{ singleMessage.content }}</span>
+      <div id="user-infos-container">
+        <img src="" alt="" id="img-user">
+        <span>{{ user.firstname }} {{ user.lastname }}</span>
+      </div>
+      <div id="message-text">
+        <span>{{ singleMessage.content }}</span>
+      </div>
+      <hr>
       <div>
-      <span id="trash" @click="deleteMessage(singleMessage)"><i class="fas fa-trash-alt" ></i></span>
-      <span id="update" @click="updateMessage(singleMessage)"><i class="fas fa-edit"></i></span>
+      <span id="trash" @click="deleteMessage(singleMessage)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
+      <span id="update" @click="updateMessage(singleMessage)"><i class="fas fa-edit"></i> Modifier</span>
       <span v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id">
         <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.message" @keypress.enter="save"/>
         <button id="update-message" @click="save">Sauvegarder</button>
@@ -54,12 +61,6 @@ export default {
       .then(response => this.allMessages = response.data)
       .catch(error => console.log(error))
   },
-    // var user = JSON.parse(localStorage.getItem('user'));
-    //         console.log(user);
-    //         axios.get(`http://localhost:3000/api/users/${user.userId}`)
-    //             .then(response => this.user = response.data.user)
-    //             .catch(error => console.log(error))
-  
   computed: {
     ...mapState({
       user: 'userInfos',
@@ -71,10 +72,6 @@ export default {
       allMessages: '[]',
       selectedFile: "",
       messageToUpdate: "",
-      // user: {
-      //   firstname: "",
-      //   lastname: "",
-      // },
     };
   },
   methods: {
@@ -94,7 +91,14 @@ export default {
       deleteMessage: function (singleMessage) {
           let self = this;
           console.log(singleMessage);
-          this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
+          axios.delete(`http://localhost:3000/api/messages/${singleMessage.id}`)
+              .then(response => {
+                  this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
+                  console.log('Message effacé')
+              })
+              .catch(error => console.log(error))
+
+          // this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
       },
       onFileSelected: function (e) {
         this.selectedFile = e.target.files[0];
@@ -102,16 +106,16 @@ export default {
       updateMessage: function (singleMessage) {
           this.messageToUpdate = singleMessage;
       },
+      logout: function () {
+        this.$store.commit('logout');
+        this.$router.push('/');
+      },
       save: function () {
         this.messageToUpdate = null;
       },
       validatedFields: function () {
         this.content != '';
       },
-      logout: function () {
-        this.$store.commit('logout');
-        this.$router.push('/');
-      }
 
   },
 
@@ -179,8 +183,12 @@ export default {
 </script>
 
 <style scoped>
-body{
-
+hr {
+  width: 100%;
+  height: 1px;
+  color: rgb(108, 151, 151);
+  border: none;
+  background-color: rgb(108, 151, 151);
 }
 #background-image {
   width: 100%;
@@ -252,6 +260,12 @@ a {
   width: 80%;
   padding-top: 20px;
 }
+#message-text {
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+  margin: 0 10px 10px 10px;
+}
 #message_container span {
   text-align: start;
 }
@@ -281,12 +295,21 @@ input:focus{
   margin-top: 10px;
   padding: 10px;
   display: flex;
-  width: 80%;
+  width: 95%;
   justify-content: space-between;
+  flex-direction: column;
 }
 #trash i, #update i{
   font-size: 15px;
   margin-left: 15px;
   cursor: pointer;
+}
+#user-infos-container{
+  margin: 10px 10px 20px 10px;
+  display: flex;
+  justify-content: flex-start;
+}
+#user-infos-container span {
+  font-weight: bold;
 }
 </style>
