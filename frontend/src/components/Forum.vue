@@ -9,13 +9,13 @@
       </div>
     </router-link>
   </div>
-  <h1>Bienvenue dans le forum {{ user.firstname }}</h1>
+  <h1>Bienvenue dans le forum {{ user.firstname }} !</h1>
   <div id="message_container">
   <span>Exprimez-vous !</span>
   <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="content" @keypress.enter="sendMessage"/>
   <div id="button_container">
-    <input type="file" @change="onFileSelected" id="add-picture" ref="file">
-    <button @click="onUpload">Ajouter mon image</button>
+    <label for="add-picture" class="label-file">Choisir une image</label>
+    <input type="file" @change="onFileSelected" id="add-picture">
     <button id="send-message" @click="sendMessage" >Publier mon message</button>
   </div>
   </div>
@@ -75,18 +75,24 @@ export default {
     return {
       content: "",
       allMessages: '[]',
-      file: "",
+      selectedFile: null,
       messageToUpdate: "",
     };
   },
   methods: {
+      onFileSelected: function (e) {
+        console.log(e);
+        this.selectedFile = e.target.files[0];
+        console.log(this.selectedFile)
+      },
       sendMessage: function () {
         console.log(this.content);
       // ctx.emit("addNewMessage", this.content);
       const formData = new FormData();
-      formData.append('file', this.file)
+      formData.append('image', this.selectedFile, this.selectedFile.name)
       this.allMessages = [...this.allMessages, { message: this.content}];
       console.log(this.allMessages);
+      console.log(formData)
       axios.post('http://localhost:3000/api/messages', {"content": this.content, "imageUrl": formData})
         .then(response => {
           console.log(response);
@@ -111,12 +117,6 @@ export default {
               })
               .catch(error => console.log(error))
       },
-      onFileSelected: function () {
-        this.file = this.$refs.file.files[0];
-      },
-      onUpload: function () {
-
-      },
       updateMessage: function (singleMessage) {
           this.messageToUpdate = singleMessage;
       },
@@ -134,66 +134,6 @@ export default {
   },
 
 };
-// export default {
-//   setup(props, ctx) {
-
-//     let content = ref("");
-//     let allMessages = ref([]);
-//     // let imageUrl = ref
-
-//     const sendMessage = function () {
-//       console.log(content.value);
-//       ctx.emit("addNewMessage", content.value);
-//       allMessages.value = [...allMessages.value, { message: content.value, id: Date.now() }];
-//       console.log(allMessages.value);
-//       axios.post('http://localhost:3000/api/messages', content.value)
-//         .then(response => {
-//           console.log(response);
-//         })
-//         .catch(error => {
-//           console.log(error);
-//         })
-//       // store.dispatch('sendMessage', allMessages.value)
-//       content.value = "";
-//     };
-//     const deleteMessage = function (singleMessage) {
-//       ctx.emit('delete-message', singleMessage);
-//       console.log(singleMessage);
-//       allMessages.value = allMessages.value.filter(m => m.id !== singleMessage.id);
-
-//     };
-//     let selectedFile = null;
-//     const onFileSelected = function (e) {
-//         selectedFile.value = e.target.files[0];
-//     };
-//     const onUpload = function () {
-
-//     };
-//     let messageToUpdate = ref(null);
-//     const updateMessage = function (singleMessage) {
-//         messageToUpdate.value = singleMessage;
-//     };
-//     let save = function () {
-//         messageToUpdate.value = null;
-//     };
-//     const validatedFields = function () {
-//         content.value != '';
-//     };
-//     return {
-//       content,
-//       sendMessage,
-//       allMessages,
-//       deleteMessage,
-//       updateMessage,
-//       save,
-//       messageToUpdate,
-//       validatedFields,
-//       onFileSelected,
-//       selectedFile,
-//       onUpload
-//     };
-//   }
-// };
 </script>
 
 <style scoped>
@@ -203,6 +143,11 @@ hr {
   color: rgb(108, 151, 151);
   border: none;
   background-color: rgb(108, 151, 151);
+}
+h1{
+  background-color: rgba(255, 255, 255, .5);
+  padding: 10px;
+  border-radius: 5px;
 }
 #background-image {
   width: 100%;
@@ -236,6 +181,23 @@ hr {
   border: none;
   margin: 15px auto;
   box-shadow: 1px 2px 3px rgb(209, 209, 209);
+}
+input[type="file"] {
+    display: none;
+}
+.label-file{
+  background-color: rgb(144, 188, 206);
+  border-radius: 10px;
+  cursor: pointer;
+  width: 150px;
+  height: 30px;
+  border: none;
+  margin: 15px auto;
+  box-shadow: 1px 2px 3px rgb(209, 209, 209);
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 #send-message {
   background-color: rgb(189, 195, 196);
