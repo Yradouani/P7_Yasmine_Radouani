@@ -14,7 +14,7 @@
   <span>Exprimez-vous !</span>
   <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="content" @keypress.enter="sendMessage"/>
   <div id="button_container">
-    <input type="file" @change="onFileSelected" id="add-picture">
+    <input type="file" @change="onFileSelected" id="add-picture" ref="file">
     <button @click="onUpload">Ajouter mon image</button>
     <button id="send-message" @click="sendMessage" >Publier mon message</button>
   </div>
@@ -27,7 +27,10 @@
         <span>{{ user.firstname }} {{ user.lastname }}</span>
       </div>
       <div id="message-text">
-        <span>{{ singleMessage.content }}</span>
+        <span id="single-message-text">{{ singleMessage.content }}</span>
+        <div>
+          <img :src="singleMessage.imageUrl" alt="" id="message_imageurl">
+        </div>
       </div>
       <hr>
       <div>
@@ -72,7 +75,7 @@ export default {
     return {
       content: "",
       allMessages: '[]',
-      selectedFile: "",
+      file: "",
       messageToUpdate: "",
     };
   },
@@ -80,9 +83,11 @@ export default {
       sendMessage: function () {
         console.log(this.content);
       // ctx.emit("addNewMessage", this.content);
+      const formData = new FormData();
+      formData.append('file', this.file)
       this.allMessages = [...this.allMessages, { message: this.content}];
       console.log(this.allMessages);
-      axios.post('http://localhost:3000/api/messages', {"content": this.content})
+      axios.post('http://localhost:3000/api/messages', {"content": this.content, "imageUrl": formData})
         .then(response => {
           console.log(response);
         })
@@ -90,6 +95,7 @@ export default {
       axios.get('http://localhost:3000/api/messages')
       .then((response) => {
         this.allMessages = response.data
+        console.log(this.allMessages)
         })
       .catch(error => console.log(error))
       this.content = "";
@@ -105,8 +111,11 @@ export default {
               })
               .catch(error => console.log(error))
       },
-      onFileSelected: function (e) {
-        this.selectedFile = e.target.files[0];
+      onFileSelected: function () {
+        this.file = this.$refs.file.files[0];
+      },
+      onUpload: function () {
+
       },
       updateMessage: function (singleMessage) {
           this.messageToUpdate = singleMessage;
@@ -270,6 +279,7 @@ a {
   display: flex;
   justify-content: flex-start;
   margin: 0 10px 10px 10px;
+  flex-direction: column;
 }
 #message_container span {
   text-align: start;
@@ -316,5 +326,15 @@ input:focus{
 }
 #user-infos-container span {
   font-weight: bold;
+}
+#message_imageurl{
+  width: 80%;
+  margin-top: 20px;
+  height: 300px;
+  object-fit: cover;
+}
+#single-message-text{
+  display: flex;
+  justify-content: flex-start;
 }
 </style>
