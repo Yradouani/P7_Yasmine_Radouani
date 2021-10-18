@@ -24,7 +24,7 @@
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
         <img src="" alt="" id="img-user">
-        <span>{{ user.firstname }} {{ user.lastname }}</span>
+        <span>{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
       </div>
       <div id="message-text">
         <span id="single-message-text">{{ singleMessage.content }}</span>
@@ -89,8 +89,13 @@ export default {
         console.log(this.content);
       // ctx.emit("addNewMessage", this.content);
       const formData = new FormData();
-      formData.append('image', this.selectedFile, this.selectedFile.name)
+      // if(this.selectedFile !== null) {
+          formData.append('image', this.selectedFile, this.selectedFile.name)
+      // }
       formData.append('content', this.content)
+      formData.append('firstname', this.user.firstname)
+      formData.append('lastname', this.user.firstname)
+      formData.append('userId', this.user.userId)
       this.allMessages = [...this.allMessages, { message: this.content}];
       console.log(this.allMessages);
       console.log(formData)

@@ -66,19 +66,20 @@ exports.updateMessage = (req, res, next) => {
 }
 
 exports.deleteMessage = (req, res, next) => {
-    // Message.findOne({where : { id: req.params.id }})
-    // .then(message => {
-    //   const filename = message.imageUrl.split('/images/')[1];
-    //   fs.unlink(`images/${filename}`, () => {
-    //     Message.destroy({ where: { id: req.params.id } })
-    //         .then(() => res.status(200).json({ message: 'Message supprimé !'}))
-    //         .catch(error => res.status(400).json({ error }));
-    //   });
-    // })
-    // .catch(error => res.status(400).json({ error }))
-    Message.destroy({where : { id: req.params.id }})
-        .then(() => res.status(200).json({ message: 'Message supprimé !'}))
-        .catch(error => res.status(400).json({ error }));
+    Message.findOne({where : { id: req.params.id }})
+    .then(message => {
+      const filename = message.imageUrl.split('/images/')[1];
+      fs.unlink(`images/${filename}`, () => {
+        Message.destroy({ where: { id: req.params.id } })
+            .then(() => res.status(200).json({ message: 'Message supprimé !'}))
+            .catch(error => res.status(400).json({ error }));
+      });
+    })
+    .catch(error => res.status(400).json({ error }))
+
+    // Message.destroy({where : { id: req.params.id }})
+    //     .then(() => res.status(200).json({ message: 'Message supprimé !'}))
+    //     .catch(error => res.status(400).json({ error }));
 }
 exports.likeMessage = (req, res, next) => {
    
