@@ -6,9 +6,7 @@
     <h2 v-else>Créer un compte</h2>
     <div id="create-accompt" v-if="mode == 'login'">
       <span>Je n'ai pas encore de compte ? </span>
-      <span @click="switchToCreateAccount()" id="create_account"
-        >Créer un compte</span
-      >
+      <span @click="switchToCreateAccount()" id="create_account">Créer un compte</span>
     </div>
     <div id="create-accompt" v-else>
       <span>J'ai déjà compte ? </span>
@@ -35,14 +33,14 @@
       </div>
       <label for="" id="password-label">
           <input
-        type="text"
+        :type="visibility" 
         id="password"
         v-model="password"
         placeholder="Mot de passe"
         />
         <div id="password-icon">
-          <i class="fas fa-eye"></i>
-          <i class="far fa-eye-slash"></i>
+          <i class="far fa-eye-slash" id="off" v-if="passwordMode == 'hide'" @click="switchToShowPassword()"></i>
+          <i class="fas fa-eye" id="on" v-else @click="switchToHidePassword()"></i>
         </div>
       </label>
     </div>
@@ -73,6 +71,8 @@ export default {
       firstname: '',
       lastname: '',
       password: '',
+      passwordMode: "hide",
+      visibility: "password",
     };
   },
   mounted: function () {
@@ -110,6 +110,14 @@ export default {
     },
     switchToLogin: function () {
       this.mode = "login";
+    },
+    switchToShowPassword: function () {
+      this.passwordMode = "show";
+      this.visibility = "text";
+    },
+    switchToHidePassword: function () {
+      this.passwordMode = "hide";
+      this.visibility = "password"
     },
     createAccount: function (){
       const self = this;
@@ -186,6 +194,13 @@ input:focus{
   transform: translateY(-50%);
   right: 10px;
 }
+#password-icon:hover{
+  cursor: pointer;
+  color: rgb(171, 171, 202);
+}
+/* #off{
+  display: none;
+} */
 #create-accompt {
   margin: 0 10px 20px;
 }
