@@ -13,6 +13,7 @@
   <div id="message_container">
   <span>Exprimez-vous !</span>
   <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="content" @keypress.enter="sendMessage"/>
+  <!-- <img :src="this.selectedFile" alt=""> -->
   <div id="button_container">
     <label for="add-picture" class="label-file">Choisir une image</label>
     <input type="file" @change="onFileSelected" id="add-picture">
@@ -94,7 +95,7 @@ export default {
       // }
       formData.append('content', this.content)
       formData.append('firstname', this.user.firstname)
-      formData.append('lastname', this.user.firstname)
+      formData.append('lastname', this.user.lastname)
       formData.append('userId', this.user.userId)
       this.allMessages = [...this.allMessages, { message: this.content}];
       console.log(this.allMessages);

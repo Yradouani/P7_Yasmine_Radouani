@@ -43,6 +43,8 @@
           <i class="fas fa-eye" id="on" v-else @click="switchToHidePassword()"></i>
         </div>
       </label>
+      <label for="add-picture" class="label-file" v-if="mode == 'create'">Choisir une image de profil</label>
+      <input type="file" @change="onFileSelected" id="add-picture">
     </div>
     <!-- <div v-if="mode == 'login' && status == 'error_login'">Adresse mail et/ou mot de passe invalide</div> -->
     <!-- <div v-if="mode == 'login' && status == 'error_create'">Adresse mail déjà utilisée</div> -->
@@ -73,6 +75,7 @@ export default {
       password: '',
       passwordMode: "hide",
       visibility: "password",
+      selectedFile: null,
     };
   },
   mounted: function () {
@@ -105,6 +108,11 @@ export default {
     ...mapState([status])
   },
   methods: {
+    onFileSelected: function (e) {
+        console.log(e);
+        this.selectedFile = e.target.files[0];
+        console.log(this.selectedFile)
+      },
     switchToCreateAccount: function () {
       this.mode = "create";
     },
@@ -122,11 +130,19 @@ export default {
     createAccount: function (){
       const self = this;
       console.log(this.email, this.firstname, this.lastname, this.password);
+      const formData = new FormData();
+      formData.append('image', this.selectedFile, this.selectedFile.name)
+      // formData.append('firstname', this.firstname)
+      // formData.append('lastname', this.lastname)
+      // formData.append('image', this.selectedFile, this.selectedFile.name)
+      // formData.append('lastname', this.lastname)
+      // formData.append('lastname', this.lastname)
       this.$store.dispatch('createAccount', {
       firstname: this.firstname,
       lastname: this.lastname,
       email: this.email,
       password: this.password,
+      imageUrl: formData
       }).then(function () {
           self.login();
       }), function (error) {
@@ -150,9 +166,36 @@ export default {
 </script>
 
 <style scoped>
+#add-picture {
+  background-color: rgb(189, 195, 196);
+  border-radius: 10px;
+  cursor: pointer;
+  width: 150px;
+  height: 30px;
+  border: none;
+  margin: 15px auto;
+  box-shadow: 1px 2px 3px rgb(209, 209, 209);
+}
+input[type="file"] {
+    display: none;
+}
+.label-file{
+  background-color: aliceblue;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  height: 30px;
+  border: none;
+  margin: 15px auto;
+  box-shadow: 1px 2px 3px rgb(209, 209, 209);
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 h1 {
   font-size: 25px;
-  background-color: rgba(255, 255, 255, .6);
+  background-color: rgba(255, 255, 255, .7);
   padding: 10px;
   border-radius: 5px;
 }
@@ -218,7 +261,7 @@ input:focus{
   width: 100%;
 }
 #password {
-  width: 100%;
+  width: 96%;
 }
 #firstname-lastname {
   width: 100%;
