@@ -51,7 +51,7 @@ export default {
   name: 'profile',
   mounted: function () {
     console.log(this.$store.state.user);
-    if (this.$store.state.user.userId == -1) {
+    if (this.$store.state.user.userId == -1 || this.$store.state.user== null) {
       this.$router.push('/');
       return;
     }

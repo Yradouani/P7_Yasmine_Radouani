@@ -18,10 +18,12 @@ exports.getMessagesFromSingleUser = (req, res, next) => {
 }
 
 exports.createMessage = (req, res, next) => {
+    console.log(req.file)
+    
     const message = new Message({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
-        imageUrl: req.body.imageUrl,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         content: req.body.content,
         userId: req.body.userId
       });
@@ -33,7 +35,7 @@ exports.createMessage = (req, res, next) => {
       })
       .catch(error => res.status(400).json({ error }));
 
-
+    // console.log(JSON.parse(req.body.message));
     // const messageObject = JSON.parse(req.body.message);
     // const message = new Message({
     //     ...messageObject,
