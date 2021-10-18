@@ -1,10 +1,14 @@
 <template>
-  <router-link to="/forum">
+<div id="header-container">
+      <button id="logout" @click="logout()">Se déconnecter</button>
+    <img src="../assets/logo.png" alt="logo" id="logo" >
+    <router-link to="/forum">
     <div id="forum-access">
       <i class="fas fa-comments"></i>
       <span>Accéder au forum</span>
     </div>
   </router-link>
+  </div>
   <h1>Bienvenu sur votre profil {{ user.firstname }} !</h1>
   <div id="profil-container">
     <div id="first-last-name">
@@ -54,6 +58,11 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 30px;
+}
+h1{
+  background-color: rgba(255, 255, 255, .6);
+  padding: 10px;
+  border-radius: 5px;
 }
 #logout {
   width: 150px;

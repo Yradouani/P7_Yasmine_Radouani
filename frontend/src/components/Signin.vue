@@ -33,12 +33,18 @@
           placeholder="Nom"
         />
       </div>
-      <input
+      <label for="" id="password-label">
+          <input
         type="text"
         id="password"
         v-model="password"
         placeholder="Mot de passe"
-      />
+        />
+        <div id="password-icon">
+          <i class="fas fa-eye"></i>
+          <i class="far fa-eye-slash"></i>
+        </div>
+      </label>
     </div>
     <!-- <div v-if="mode == 'login' && status == 'error_login'">Adresse mail et/ou mot de passe invalide</div> -->
     <!-- <div v-if="mode == 'login' && status == 'error_create'">Adresse mail déjà utilisée</div> -->
@@ -132,40 +138,15 @@ export default {
     }
     
   },
-  // let newUser = {
-      // firstname: "",
-      // lastname: "",
-      // adress: "",
-      // password: "",
-      // };
-  // setup(props, ctx) {
-  //   let newUser = {
-  //     firstname: "",
-  //     lastname: "",
-  //     adress: "",
-  //     password: "",
-  //   };
-  //   const connexion = function () {
-  //     console.log(newUser);
-  //     ctx.emit("add", newUser);
-  //     newUser.value = "";
-  //   };
-  //   const createAccount = function (){
-  //     $store.dispatch('createAccount', newUser)
-  //   };
-
-  //   return {
-  //     newUser,
-  //     connexion,
-  //     createAccount,
-  //   };
-  // },
 };
 </script>
 
 <style scoped>
 h1 {
   font-size: 25px;
+  background-color: rgba(255, 255, 255, .6);
+  padding: 10px;
+  border-radius: 5px;
 }
 #connexion {
   border: 1px solid #070707;
@@ -184,10 +165,26 @@ input {
   margin: 5px auto;
   border: none;
   height: 30px;
+  padding-left: 10px;
 }
 input::placeholder {
   color: black;
-  margin-left: 5px;
+  margin-left: 10px;
+}
+#password-label{
+  position: relative;
+}
+input:focus{
+  outline: none;
+  border: 2px solid rgb(171, 171, 202);
+}
+#password-icon{
+  display: flex;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
 }
 #create-accompt {
   margin: 0 10px 20px;

@@ -146,7 +146,7 @@ hr {
   background-color: rgb(108, 151, 151);
 }
 h1{
-  background-color: rgba(255, 255, 255, .5);
+  background-color: rgba(255, 255, 255, .6);
   padding: 10px;
   border-radius: 5px;
 }
