@@ -90,10 +90,11 @@ export default {
       // ctx.emit("addNewMessage", this.content);
       const formData = new FormData();
       formData.append('image', this.selectedFile, this.selectedFile.name)
+      formData.append('content', this.content)
       this.allMessages = [...this.allMessages, { message: this.content}];
       console.log(this.allMessages);
       console.log(formData)
-      axios.post('http://localhost:3000/api/messages', {"content": this.content, "imageUrl": formData})
+      axios.post('http://localhost:3000/api/messages', formData)
         .then(response => {
           console.log(response);
         })
