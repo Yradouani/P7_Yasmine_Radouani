@@ -132,22 +132,16 @@ export default {
       console.log(this.email, this.firstname, this.lastname, this.password);
       const formData = new FormData();
       formData.append('image', this.selectedFile, this.selectedFile.name)
-      // formData.append('firstname', this.firstname)
-      // formData.append('lastname', this.lastname)
-      // formData.append('image', this.selectedFile, this.selectedFile.name)
-      // formData.append('lastname', this.lastname)
-      // formData.append('lastname', this.lastname)
-      this.$store.dispatch('createAccount', {
-      firstname: this.firstname,
-      lastname: this.lastname,
-      email: this.email,
-      password: this.password,
-      imageUrl: formData
-      }).then(function () {
+      formData.append('firstname', this.firstname)
+      formData.append('lastname', this.lastname)
+      formData.append('email', this.email)
+      formData.append('password', this.password)
+      this.$store.dispatch('createAccount', formData)
+        .then(function () {
           self.login();
-      }), function (error) {
-        console.log(error);
-      }
+        }), function (error) {
+          console.log(error);
+        }
     },
     login: function (){
       const self = this;

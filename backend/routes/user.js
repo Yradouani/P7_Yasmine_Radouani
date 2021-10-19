@@ -4,7 +4,7 @@ const {signUp, logIn, getAllUsers, getOneUser, deleteUser, updateUser} = require
 const multerImage = require ('../middleware/multer-config.js');
 const authorization = require ('../middleware/auth.js')
 
-router.post('/auth/signup', signUp);
+router.post('/auth/signup', multerImage, signUp);
 router.post('/auth/login', logIn);
 // router.post('/infos', userInfos);
 router.get('/users', getAllUsers);

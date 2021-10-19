@@ -16,7 +16,7 @@ exports.signUp = (req, res, next) => {
         password: hash,
         firstname: req.body.firstname,
         lastname: req.body.lastname, 
-        // imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
       });
       console.log(user)
       user.save()

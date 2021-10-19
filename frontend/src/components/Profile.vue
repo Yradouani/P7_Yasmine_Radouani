@@ -16,7 +16,7 @@
       <span>Prénom : {{ user.firstname }}</span>
     </div>
     <div id="image-container">
-      <img src="../assets/depositphotos.jpg" alt="">
+      <img :src="user.imageUrl" alt="">
     </div>
     <div id="buttons">
       <button id="update-profile">Modifier mon profil</button>

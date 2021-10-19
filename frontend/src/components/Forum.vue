@@ -24,8 +24,10 @@
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
-        <img src="" alt="" id="img-user">
-        <span>{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
+        <span id="img-user-container">
+          <img :src="user.imageUrl" alt="" id="img-user">
+        </span>
+        <span id="first-and-last-name">{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
       </div>
       <div id="message-text">
         <span id="single-message-text">{{ singleMessage.content }}</span>
@@ -90,7 +92,7 @@ export default {
         console.log(this.content);
       // ctx.emit("addNewMessage", this.content);
       const formData = new FormData();
-      // if(this.selectedFile !== null) {
+      // if(this.selectedFile !== null && this.selectedFile.name !== null) {
           formData.append('image', this.selectedFile, this.selectedFile.name)
       // }
       formData.append('content', this.content)
@@ -227,6 +229,20 @@ i {
   display: flex;
   flex-direction: column;
   transition : all 200ms;
+}
+#img-user-container{
+  width: 35px;
+  height: 35px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+#img-user-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#first-and-last-name{
+  margin: 7px 0 0 12px;
 }
 #profile-container:hover {
   transform: scale(1.1);
