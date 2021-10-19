@@ -24,7 +24,7 @@ const user = (sequelize, DataTypes) => {
             type: DataTypes.STRING, 
             allowNull: false
         },
-        imageUrl: {
+        imageProfil: {
             type: DataTypes.STRING, 
             allowNull: true
         }

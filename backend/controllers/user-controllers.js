@@ -16,7 +16,7 @@ exports.signUp = (req, res, next) => {
         password: hash,
         firstname: req.body.firstname,
         lastname: req.body.lastname, 
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        imageProfil: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
       });
       console.log(user)
       user.save()
@@ -149,7 +149,7 @@ exports.updateUser = (req, res, next) => {
 exports.deleteUser = (req, res, next) => {
     User.findByPk({ userId: req.params.userId })
     .then(user => {
-      const filename = user.imageUrl.split('/images/')[1];
+      const filename = user.imageProfil.split('/images/')[1];
       fs.unlink(`images/${filename}`, () => {
         User.destroy({ where: { userId: req.params.userId } })
             .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))

@@ -25,7 +25,7 @@
   <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
         <span id="img-user-container">
-          <img :src="user.imageUrl" alt="" id="img-user">
+          <img :src="singleMessage.imageProfil" alt="" id="img-user">
         </span>
         <span id="first-and-last-name">{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
       </div>
@@ -37,8 +37,8 @@
       </div>
       <hr>
       <div>
-      <span id="trash" @click="deleteMessage(singleMessage)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
-      <span id="update" @click="updateMessage(singleMessage)"><i class="fas fa-edit"></i> Modifier</span>
+      <span id="trash" @click="deleteMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-trash-alt" ></i> Supprimer</span>
+      <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <span v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id">
         <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.message" @keypress.enter="save"/>
         <button id="update-message" @click="save">Sauvegarder</button>
@@ -57,7 +57,7 @@ export default {
   name: 'profile',
   mounted: function () {
     console.log(this.$store.state.user);
-    if (this.$store.state.user.userId == -1 || this.$store.state.user== null) {
+    if (this.$store.state.user.userId < 1 || this.$store.state.user== null) {
       this.$router.push('/');
       return;
     }
@@ -90,30 +90,39 @@ export default {
       },
       sendMessage: function () {
         console.log(this.content);
-      // ctx.emit("addNewMessage", this.content);
       const formData = new FormData();
-      // if(this.selectedFile !== null && this.selectedFile.name !== null) {
+      // if(this.selectedFile) {
           formData.append('image', this.selectedFile, this.selectedFile.name)
+          formData.append('content', this.content)
+          formData.append('firstname', this.user.firstname)
+          formData.append('lastname', this.user.lastname)
+          formData.append('userId', this.user.userId)
+          formData.append('imageProfil', this.user.imageProfil)
+          console.log(this.user.imageProfil)
+          this.allMessages = [...this.allMessages, { message: this.content}];
+          console.log(this.allMessages);
+          console.log(formData)
+          axios.post('http://localhost:3000/api/messages', formData)
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => console.log(error))
+      // } else {
+        this.allMessages = [...this.allMessages, { message: this.content}];
+        axios.post('http://localhost:3000/api/messages', {"content": this.content, "firstname": this.firstname})
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => console.log(error))
       // }
-      formData.append('content', this.content)
-      formData.append('firstname', this.user.firstname)
-      formData.append('lastname', this.user.lastname)
-      formData.append('userId', this.user.userId)
-      this.allMessages = [...this.allMessages, { message: this.content}];
-      console.log(this.allMessages);
-      console.log(formData)
-      axios.post('http://localhost:3000/api/messages', formData)
-        .then(response => {
-          console.log(response);
-        })
+      
+        axios.get('http://localhost:3000/api/messages')
+        .then((response) => {
+          this.allMessages = response.data
+          console.log(this.allMessages)
+          })
         .catch(error => console.log(error))
-      axios.get('http://localhost:3000/api/messages')
-      .then((response) => {
-        this.allMessages = response.data
-        console.log(this.allMessages)
-        })
-      .catch(error => console.log(error))
-      this.content = "";
+        this.content = "";
       },
       deleteMessage: function (singleMessage) {
           let self = this;

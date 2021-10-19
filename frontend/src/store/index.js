@@ -39,7 +39,7 @@ const store = createStore ({
             firstname: '',
             lastname: '',
             email: '',
-            imageUrl: '',
+            imageProfil: '',
         }
     },
     getters : {

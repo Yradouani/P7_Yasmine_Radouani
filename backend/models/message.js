@@ -17,6 +17,10 @@ const message = (sequelize, DataTypes) => {
             type: DataTypes.STRING, 
             allowNull: true
         },
+        imageProfil: {
+            type: DataTypes.STRING, 
+            allowNull: true
+        },
         content: {
             type: DataTypes.STRING, 
             allowNull: false

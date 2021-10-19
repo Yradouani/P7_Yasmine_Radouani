@@ -12,11 +12,11 @@
   <h1>Bienvenu sur votre profil {{ user.firstname }} !</h1>
   <div id="profil-container">
     <div id="first-last-name">
-      <span>Nom : {{ user.lastname }}</span>
-      <span>Prénom : {{ user.firstname }}</span>
+      <span>{{ user.firstname }}  </span>
+      <span>{{ user.lastname }}</span>
     </div>
     <div id="image-container">
-      <img :src="user.imageUrl" alt="">
+      <img :src="user.imageProfil" alt="">
     </div>
     <div id="buttons">
       <button id="update-profile">Modifier mon profil</button>
@@ -58,11 +58,19 @@ export default {
   display: flex;
   justify-content: space-between;
   margin: 30px;
+  align-items: center;
 }
 h1{
   background-color: rgba(255, 255, 255, .6);
   padding: 10px;
   border-radius: 5px;
+}
+#logo{
+  margin-left: 90px;
+}
+#header-container{
+  width: 100%;
+  display: flex;
 }
 #logout {
   width: 150px;
@@ -70,6 +78,7 @@ h1{
   background-color: rgb(189, 195, 196);
   border-radius: 10px;
   cursor: pointer;
+  margin: 20px;
 }
 #update-profile {
   width: 150px;
@@ -107,11 +116,14 @@ a {
 }
 #first-last-name {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   margin-top: 20px;
 }
+#first-last-name span{
+  margin: 0 10px;
+}
 #image-container {
-  width: 45%;
+  width: 55%;
   height: 350px;
   overflow: hidden;
   margin: 20px auto;

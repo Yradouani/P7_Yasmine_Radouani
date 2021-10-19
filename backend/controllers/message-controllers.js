@@ -25,7 +25,8 @@ exports.createMessage = (req, res, next) => {
         lastname: req.body.lastname,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         content: req.body.content,
-        userId: req.body.userId
+        userId: req.body.userId,
+        imageProfil: req.body.imageProfil
       });
 
     message.save()
