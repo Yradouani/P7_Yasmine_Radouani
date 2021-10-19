@@ -11,13 +11,24 @@ exports.signUp = (req, res, next) => {
     .then(hash => {
       console.log('En cours de création nouvel utilisateur')
       console.log(req.file)
-      const user = new User({
-        email: req.body.email,
-        password: hash,
-        firstname: req.body.firstname,
-        lastname: req.body.lastname, 
-        imageProfil: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-      });
+      let user;
+      if(req.file){
+        user = new User({
+          email: req.body.email,
+          password: hash,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname, 
+          imageProfil: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        });
+      } else {
+        user = new User({
+          email: req.body.email,
+          password: hash,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+        });
+      }
+      
       console.log(user)
       user.save()
         .then(response => {

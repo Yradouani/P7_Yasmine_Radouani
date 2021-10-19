@@ -110,14 +110,6 @@ export default {
               console.log(response);
             })
             .catch(error => console.log(error))
-      // } else {
-        this.allMessages = [...this.allMessages, { message: this.content}];
-        axios.post('http://localhost:3000/api/messages', {"content": this.content, "firstname": this.firstname})
-            .then(response => {
-              console.log(response);
-            })
-            .catch(error => console.log(error))
-      // }
       
         axios.get('http://localhost:3000/api/messages')
         .then((response) => {
