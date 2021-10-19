@@ -39,6 +39,8 @@
       <div>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
+      <span id="like"><i class="far fa-thumbs-up"></i></span>
+      <span id="dislike"><i class="far fa-thumbs-down"></i></span>
       <span v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id">
         <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.message" @keypress.enter="save"/>
         <button id="update-message" @click="save">Sauvegarder</button>
@@ -308,9 +310,9 @@ input:focus{
   justify-content: space-between;
   flex-direction: column;
 }
-#trash i, #update i{
+#trash i, #update i, #like i, #dislike i{
   font-size: 15px;
-  margin-left: 15px;
+  margin-left: 25px;
   cursor: pointer;
 }
 #user-infos-container{
