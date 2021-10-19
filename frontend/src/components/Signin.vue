@@ -131,7 +131,10 @@ export default {
       const self = this;
       console.log(this.email, this.firstname, this.lastname, this.password);
       const formData = new FormData();
-      formData.append('image', this.selectedFile, this.selectedFile.name)
+      if(this.selectedFile != null){
+          formData.append('image', this.selectedFile, this.selectedFile.name)
+      }
+      
       formData.append('firstname', this.firstname)
       formData.append('lastname', this.lastname)
       formData.append('email', this.email)

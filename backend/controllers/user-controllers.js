@@ -10,7 +10,7 @@ exports.signUp = (req, res, next) => {
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       console.log('En cours de création nouvel utilisateur')
-      
+      console.log(req.file)
       const user = new User({
         email: req.body.email,
         password: hash,

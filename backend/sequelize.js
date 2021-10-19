@@ -24,7 +24,7 @@ const UserModel = require ('./models/user.js')
       const User = UserModel(sequelize, DataTypes)
       
       const initDb = () => {
-        sequelize.sync({force: true})
+        sequelize.sync()
         .then(_ => {
           console.log('Database api synchronised')})
         .catch(error => console.error(`Cannot synchronised database ${error}`))

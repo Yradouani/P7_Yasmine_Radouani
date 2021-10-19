@@ -31,7 +31,7 @@
       </div>
       <div id="message-text">
         <span id="single-message-text">{{ singleMessage.content }}</span>
-        <div>
+        <div v-if="singleMessage.imageUrl != null">
           <img :src="singleMessage.imageUrl" alt="" id="message_imageurl">
         </div>
       </div>
@@ -93,8 +93,9 @@ export default {
       sendMessage: function () {
         console.log(this.content);
       const formData = new FormData();
-      // if(this.selectedFile) {
+      if(this.selectedFile != null) {
           formData.append('image', this.selectedFile, this.selectedFile.name)
+      }
           formData.append('content', this.content)
           formData.append('firstname', this.user.firstname)
           formData.append('lastname', this.user.lastname)

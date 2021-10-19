@@ -19,15 +19,25 @@ exports.getMessagesFromSingleUser = (req, res, next) => {
 
 exports.createMessage = (req, res, next) => {
     console.log(req.file)
-    
-    const message = new Message({
+    let message
+    if(req.file){
+        message = new Message({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
         content: req.body.content,
         userId: req.body.userId,
         imageProfil: req.body.imageProfil
-      });
+        });
+    } else {
+        message = new Message({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            content: req.body.content,
+            userId: req.body.userId,
+            imageProfil: req.body.imageProfil
+            });
+    }
 
     message.save()
       .then(response => {
