@@ -82,6 +82,7 @@ export default {
       allMessages: '[]',
       selectedFile: null,
       messageToUpdate: "",
+      userInLocalStorage: JSON.parse(localStorage.getItem('user')),
     };
   },
   methods: {
@@ -121,6 +122,7 @@ export default {
       },
       deleteMessage: function (singleMessage) {
           let self = this;
+          console.log(this.userInLocalStorage.token)
           console.log(singleMessage);
           axios.delete(`http://localhost:3000/api/messages/${singleMessage.id}`)
               .then(response => {
@@ -306,6 +308,9 @@ input:focus{
 #trash i, #update i, #like i, #dislike i{
   font-size: 15px;
   margin-left: 25px;
+  cursor: pointer;
+}
+#trash, #update{
   cursor: pointer;
 }
 #user-infos-container{

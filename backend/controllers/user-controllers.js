@@ -39,23 +39,7 @@ exports.signUp = (req, res, next) => {
 
     })
     .catch(error => res.status(500).json({ error }));
-    // db.query('INSERT INTO users(firstname) VALUES ? AND', [req.body.firstname], (err, result) => {
-    //     if (err) {
-    //         res.json(error(err.message))
-    //     } else {
-    //         db.query('SELECT * FROM users WHERE firstname = ?', [req.body.firstname], (err, result) => {
-    //             if (err) {
-    //                 res.json(error(err.message))
-    //             } else {
-    //                 res.json({
-    //                     id: result[0].id,
-    //                     firstname: result[0].firstname
-    //                 })
-    //             }
-    //         })
-    //     }
-    // })
-}
+  }
 
 // Connection au compte utilisateur
 exports.logIn = (req, res, next) => {

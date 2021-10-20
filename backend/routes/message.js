@@ -6,9 +6,9 @@ const authorization = require ('../middleware/auth.js');
 
 router.get('/', getAllMessages);
 router.get('/:userId', getMessagesFromSingleUser);
-router.post('/', multerImage, createMessage);
-router.put('/:id', multerImage, updateMessage);
-router.delete('/:id', deleteMessage);
+router.post('/', authorization, multerImage, createMessage);
+router.put('/:id', authorization, multerImage, updateMessage);
+router.delete('/:id', authorization, deleteMessage);
 router.post('/:id/like', likeMessage);
 
 
