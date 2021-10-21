@@ -27,6 +27,11 @@ const user = (sequelize, DataTypes) => {
         imageProfil: {
             type: DataTypes.STRING, 
             allowNull: true
+        },
+        isAdmin: {
+            type: DataTypes.BOOLEAN, 
+            allowNull: true,
+
         }
     })
 }

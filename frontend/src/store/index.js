@@ -41,6 +41,7 @@ const store = createStore ({
             lastname: '',
             email: '',
             imageProfil: '',
+            isAdmin: '',
         }
     },
     getters : {

@@ -19,6 +19,7 @@ exports.signUp = (req, res, next) => {
           firstname: req.body.firstname,
           lastname: req.body.lastname, 
           imageProfil: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+          isAdmin: 0
         });
       } else {
         user = new User({
@@ -56,7 +57,9 @@ exports.logIn = (req, res, next) => {
           res.status(200).json({
             userId: user.userId,
             token: jwt.sign(
-                { userId: user.userId },
+                { userId: user.userId,
+                  isAdmin: user.isAdmin
+                },
               process.env.TOKEN,
               { expiresIn: '24h' }
             )

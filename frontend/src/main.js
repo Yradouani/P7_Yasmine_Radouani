@@ -5,15 +5,18 @@ import store from '@/store/'
 import axios from "axios";
 
 let userInLocalStorage = JSON.parse(localStorage.getItem('user'));
-let token = userInLocalStorage.token
 
-axios.interceptors.request.use(config => {
-    console.log(token)
-    config.headers.authorization = `Bearer ${token}`;
-    return config
-},
-error => {
-    return Promise.reject(error);
-})
+if(userInLocalStorage) {
+    let token = userInLocalStorage.token
+    axios.interceptors.request.use(config => {
+        console.log(token)
+        config.headers.authorization = `Bearer ${token}`;
+        return config
+    },
+    error => {
+        return Promise.reject(error);
+    })
+}
+
 
 createApp(App).use(store).use(router).mount('#app')
