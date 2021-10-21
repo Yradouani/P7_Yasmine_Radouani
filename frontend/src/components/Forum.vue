@@ -22,7 +22,7 @@
   </div>
 
   <div id="all-message-container" v-if="allMessages.length > 0">
-  <div id="message-container" v-for="singleMessage in allMessages" v-bind:key="singleMessage.id">
+  <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
         <span id="img-user-container">
           <img :src="singleMessage.imageProfil" alt="" id="img-user">
@@ -68,6 +68,9 @@ export default {
     axios.get('http://localhost:3000/api/messages')
       .then((response) => {
         this.allMessages = response.data
+        this.allMessagesReverse = this.allMessages.reverse();
+        console.log(this.allMessagesReverse);
+        console.log(this.allMessages);
         })
       .catch(error => console.log(error))
   },
@@ -83,6 +86,7 @@ export default {
       selectedFile: null,
       messageToUpdate: "",
       userInLocalStorage: JSON.parse(localStorage.getItem('user')),
+      allMessagesReverse: '',
     };
   },
   methods: {
