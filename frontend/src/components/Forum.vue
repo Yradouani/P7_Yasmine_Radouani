@@ -44,10 +44,17 @@
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
         <span id="update-header-text">Modifier votre message</span>
-        <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.content" @keypress.enter="save"/>
+        
+          <label for="new-picture" class="new-file" id="new-picture-container">Modifier mon image</label>
+          <input type="file" @change="onFileSelected" id="new-picture">
+        
+        <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.content" @keypress.enter="save" id="update-text-input"/>
         <!-- <img :src="messageToUpdate.imageUrl" alt=""> -->
-        <button id="update-message" @click="save(singleMessage)">Sauvegarder</button>
-        <button @click="cancel()">Annuler</button>
+        <hr>
+        <div>
+          <button id="update-message" @click="save(singleMessage)">Sauvegarder</button>
+          <button id="cancel" @click="cancel()">Annuler</button>
+        </div>
       </div>
       </div>
   </div>
@@ -157,30 +164,24 @@ export default {
       },
       save: function (singleMessage) {
         
-        // const formData = new FormData();
-        // formData.append('content', this.singleMessage.content)
-        // formData.append('firstname', this.user.firstname)
-        // formData.append('lastname', this.user.lastname)
-        // formData.append('userId', this.user.userId)
-        // formData.append('imageProfil', this.user.imageProfil)
+        let newFormData = new FormData();
 
-        console.log(singleMessage)
-        // if(singleMessage.imageUrl) {
-
+        console.log(this.selectedFile)
+        // let newMessage;
+        // if(this.selectedFile != null) {
+        //   newFormData.append('image', this.selectedFile, this.selectedFile.name)
         // }
-        axios.put(`http://localhost:3000/api/messages/${singleMessage.id}`, {'content': singleMessage.content})
+        newFormData.append('image', this.selectedFile, this.selectedFile.name)
+        newFormData.append('content', singleMessage.content)
+        console.log(newFormData)
+        axios.put(`http://localhost:3000/api/messages/${singleMessage.id}`, newFormData)
           .then(response => {
               console.log(response);
             })
           .catch(error => console.log(error))
         this.messageToUpdate = null;
       console.log(singleMessage)
-      // axios.get('http://localhost:3000/api/messages')
-      //   .then((response) => {
-      //     this.allMessages = response.data
-      //     console.log(this.allMessages)
-      //     })
-      //   .catch(error => console.log(error))
+      this.getAllMessages();
       },
       logout: function () {
         this.$store.commit('logout');
@@ -257,6 +258,9 @@ input[type="file"] {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.new-file{
+  cursor: pointer;
 }
 #send-message {
   background-color: rgb(189, 195, 196);
@@ -385,17 +389,47 @@ input:focus{
 }
 #message-to-update-container{
   position: fixed;
-  width: 90%;
+  width: 80%;
   height: 300px;
   top: 20%;
-  border: 1px solid black;
+  border: 1.5px solid black;
   left: 5%;
+  right: 5%;
   background-color: white;
   padding: 20px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
 }
 #update-header-text{
-  font-size: 16px;
+  font-size: 20px;
   font-weight: bold;
+}
+#update-header-text::placeholder {
+  position: relative;
+  top: 10px;
+  margin-bottom: 30px;
+}
+#update-text-input{
+  width: 100%;
+  padding: 0;
+  margin: 20px 0;
+  border: none;
+  height: 200px;
+  display: flex;
+}
+#update-message, #cancel{
+  background-color: white;
+  margin: 10px 30px;
+  width: 100px;
+}
+#new-picture-container{
+  border: 1px dashed black;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
 }
 @media (max-width: 700px){
   #all-message-container{
