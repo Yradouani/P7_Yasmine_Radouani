@@ -4,7 +4,9 @@
     <img src="../assets/logo.png" alt="logo" id="logo" >
     <router-link to="/profile">
       <div id="profile-container">
-        <i class="fas fa-user-circle"></i>
+        <span id="img-profil-container" >
+          <img :src="user.imageProfil" alt="" id="img-user" v-if="user.imageProfil">
+        </span>
         <span id="profile">Mon profil</span>
       </div>
     </router-link>
@@ -13,7 +15,7 @@
   <div id="message_container">
   <span>Exprimez-vous !</span>
   <input class="message" :class="{'button--disabled' : !validatedFields}" type="texte" placeholder="Écrivez votre message" v-model="content" @keypress.enter="sendMessage"/>
-  <!-- <img :src="this.selectedFile" alt=""> -->
+  <img :src="selectedFile" alt="">
   <div id="button_container">
     <label for="add-picture" class="label-file">Choisir une image</label>
     <input type="file" @change="onFileSelected" id="add-picture">
@@ -24,8 +26,8 @@
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
-        <span id="img-user-container">
-          <img :src="singleMessage.imageProfil" alt="" id="img-user">
+        <span id="img-user-container" >
+          <img :src="singleMessage.imageProfil" alt="" id="img-user" v-if="singleMessage.imageProfil">
         </span>
         <span id="first-and-last-name">{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
       </div>
@@ -37,14 +39,16 @@
       </div>
       <hr>
       <div>
+        <span id="like" @click="likeMessage()"><i class="far fa-thumbs-up"></i> J'aime</span>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin = 1)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
-      <span id="like" @click="likeMessage()"><i class="far fa-thumbs-up"></i></span>
-      <span id="dislike"><i class="far fa-thumbs-down"></i></span>
-      <span v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id">
-        <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.message" @keypress.enter="save"/>
-        <button id="update-message" @click="save">Sauvegarder</button>
-      </span>
+      <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
+        <span id="update-header-text">Modifier votre message</span>
+        <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.content" @keypress.enter="save"/>
+        <!-- <img :src="messageToUpdate.imageUrl" alt=""> -->
+        <button id="update-message" @click="save(singleMessage)">Sauvegarder</button>
+        <button @click="cancel()">Annuler</button>
+      </div>
       </div>
   </div>
   </div>
@@ -90,6 +94,16 @@ export default {
     };
   },
   methods: {
+      getAllMessages: function (){
+        axios.get('http://localhost:3000/api/messages')
+          .then((response) => {
+            this.allMessages = response.data
+            this.allMessagesReverse = this.allMessages.reverse();
+            console.log(this.allMessagesReverse);
+            console.log(this.allMessages);
+            })
+          .catch(error => console.log(error))
+      },
       onFileSelected: function (e) {
         console.log(e);
         this.selectedFile = e.target.files[0];
@@ -116,12 +130,7 @@ export default {
             })
             .catch(error => console.log(error))
       
-        axios.get('http://localhost:3000/api/messages')
-        .then((response) => {
-          this.allMessages = response.data
-          console.log(this.allMessages)
-          })
-        .catch(error => console.log(error))
+        this.getAllMessages();
         this.content = "";
       },
       deleteMessage: function (singleMessage) {
@@ -135,16 +144,47 @@ export default {
                   console.log('Message effacé')
               })
               .catch(error => console.log(error))
+          this.getAllMessages();
       },
       updateMessage: function (singleMessage) {
+        
+          console.log(singleMessage)
           this.messageToUpdate = singleMessage;
+          
+      },
+      cancel: function () {
+          this.messageToUpdate = null;
+      },
+      save: function (singleMessage) {
+        
+        // const formData = new FormData();
+        // formData.append('content', this.singleMessage.content)
+        // formData.append('firstname', this.user.firstname)
+        // formData.append('lastname', this.user.lastname)
+        // formData.append('userId', this.user.userId)
+        // formData.append('imageProfil', this.user.imageProfil)
+
+        console.log(singleMessage)
+        // if(singleMessage.imageUrl) {
+
+        // }
+        axios.put(`http://localhost:3000/api/messages/${singleMessage.id}`, {'content': singleMessage.content})
+          .then(response => {
+              console.log(response);
+            })
+          .catch(error => console.log(error))
+        this.messageToUpdate = null;
+      console.log(singleMessage)
+      // axios.get('http://localhost:3000/api/messages')
+      //   .then((response) => {
+      //     this.allMessages = response.data
+      //     console.log(this.allMessages)
+      //     })
+      //   .catch(error => console.log(error))
       },
       logout: function () {
         this.$store.commit('logout');
         this.$router.push('/');
-      },
-      save: function () {
-        this.messageToUpdate = null;
       },
       validatedFields: function () {
         this.content != '';
@@ -246,10 +286,19 @@ i {
   border-radius: 20px;
   overflow: hidden;
 }
-#img-user-container img{
+#img-profil-container{
+  width: 50px;
+  height: 50px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+#img-user-container img, #img-profil-container img{
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+.without-img{
+  display: none;
 }
 #first-and-last-name{
   margin: 7px 0 0 12px;
@@ -273,7 +322,7 @@ a {
   width: 90%;
   display: flex;
   justify-content: flex-start;
-  margin: 0 10px 10px 10px;
+  margin: 0 auto 10px auto;
   flex-direction: column;
 }
 #message_container span {
@@ -305,7 +354,6 @@ input:focus{
   margin-top: 10px;
   padding: 10px;
   display: flex;
-  width: 95%;
   justify-content: space-between;
   flex-direction: column;
 }
@@ -334,5 +382,24 @@ input:focus{
 #single-message-text{
   display: flex;
   justify-content: flex-start;
+}
+#message-to-update-container{
+  position: fixed;
+  width: 90%;
+  height: 300px;
+  top: 20%;
+  border: 1px solid black;
+  left: 5%;
+  background-color: white;
+  padding: 20px;
+}
+#update-header-text{
+  font-size: 16px;
+  font-weight: bold;
+}
+@media (max-width: 700px){
+  #all-message-container{
+    width: 100%;
+  }
 }
 </style>

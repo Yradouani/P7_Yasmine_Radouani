@@ -127,6 +127,9 @@ export default {
       this.passwordMode = "hide";
       this.visibility = "password"
     },
+    regExFLC: function (value) {
+        return /^[A-Z\-a-z-àâäãçéèêëìîïòôöõùûüñ-]{3,20}$/.test(value);
+    },
     createAccount: function (){
       const self = this;
       console.log(this.email, this.firstname, this.lastname, this.password);

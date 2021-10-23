@@ -32,6 +32,7 @@ body {
   background-color: rgb(237, 250, 246);
   background-image: url('./sean-pollock-PhYq704ffdA-unsplash.jpg');
   background-size: 100%;
+  margin: 0;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
