@@ -26,8 +26,8 @@
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
-        <span id="img-user-container" >
-          <img :src="singleMessage.imageProfil" alt="" id="img-user" v-if="singleMessage.imageProfil">
+        <span id="img-user-container" v-if="singleMessage.imageProfil">
+          <img :src="singleMessage.imageProfil" alt="" id="img-user">
         </span>
         <span id="first-and-last-name">{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
       </div>
@@ -40,7 +40,7 @@
       <hr>
       <div>
         <span id="like" @click="likeMessage()"><i class="far fa-thumbs-up"></i> J'aime</span>
-      <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin = 1)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
+      <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin == true)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
         <span id="update-header-text">Modifier votre message</span>

@@ -25,7 +25,7 @@
       <button @click="deleteAccount()" id="delete-user">Je souhaite supprimer mon compte ?</button>
       <div v-if="iWantToDeleteAccount" id="confirmation-container">
         <h2>Êtes-vous sûr de supprimer votre compte Groupomania ?</h2>
-        <button id="confirmation" @click="deleteUser(singleUser)">Oui j'en suis sûr !</button>
+        <button id="confirmation" @click="deleteUser()">Oui j'en suis sûr !</button>
         <button @click="cancel()" id="cancel">Non je souhaites annuler</button>
 
       </div>
@@ -51,6 +51,7 @@ export default {
   data() {
     return {
       iWantToDeleteAccount: false,
+      userLocalStorage: JSON.parse(localStorage.getItem('user')),
     };
   },
   computed: {
@@ -69,11 +70,12 @@ export default {
     cancel: function () {
       this.iWantToDeleteAccount = false;
     },
-    deleteUser: function (singleUser) {
-      axios.delete(`http://localhost:3000/api/users/${singleUser.userId}`)
+    deleteUser: function () {
+      axios.delete(`http://localhost:3000/api/users/${this.user.userId}`)
               .then(response => {
                   this.message = response;
                   console.log("Suppression de l'utilisateur")
+                  this.$router.push('/');
               })
               .catch(error => console.log(error))
     },

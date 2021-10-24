@@ -155,6 +155,7 @@ export default {
       email: this.email,
       password: this.password,
       }).then(function () {
+          self.$store.dispatch('getUserInfos');
           self.$router.push('/forum');
       }), function (error) {
         console.log(error);
