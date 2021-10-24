@@ -63,7 +63,7 @@ exports.createMessage = (req, res, next) => {
 exports.updateMessage = (req, res, next) => {
     // const messageObject = req.file ?
     // {
-    //   ...req.body.message,
+    //   ...JSON.parse(req.body.message),
     //   imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     // } : { ...req.body };
     
@@ -71,6 +71,7 @@ exports.updateMessage = (req, res, next) => {
     // .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
     // .catch(error => res.status(400).json({ error }));
 
+    // ------------------------------------------
     let message
     if(req.file){
             message = new Message({
@@ -91,51 +92,49 @@ exports.updateMessage = (req, res, next) => {
             })
         }
     console.log(req.file)
-    // if(req.file){
-    //     // message = new Message({
-    //         Message.update({ id: req.params.id},
-    //     {firstname: req.body.firstname,
-    //     lastname: req.body.lastname,
-    //     imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    //     content: req.body.content,
-    //     userId: req.body.userId,
-    //     imageProfil: req.body.imageProfil
-    //     })
+        console.log(message.imageUrl)
+        const id = req.params.id
+        Message.update(req.body, {where: { id: id }})
+        .then(_ => {
+            Message.findByPk(id)
+                .then(response => {
+                    const message = 'Message modifié !'
+                    res.status(201).json({ message, response})
+                })
+                .catch(error => res.status(400).json({ error }))
+            })
+            .catch(error => res.status(400).json({ error }))
 
+    // -------------------------------------------------
+    // if(req.file){
+    //         Message.update({where: { id: req.params.id }}, {
+    //                         firstname: req.body.firstname,
+    //                         lastname: req.body.lastname,
+    //                         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    //                         content: req.body.content,
+    //                         userId: req.body.userId,
+    //                         imageProfil: req.body.imageProfil
+    //                     }
+    //         )
     //     .then(response => {
     //         const message = 'Message modifié !'
     //         res.status(201).json({ message, response})
     //     })
     //     .catch(error => res.status(400).json({ error }))
     // } else {
-    //     Message.update({where: { id: req.params.id }},
-    //         {firstname: req.body.firstname,
+    //     Message.update({where: { id: req.params.id }}, {
+    //         firstname: req.body.firstname,
     //         lastname: req.body.lastname,
     //         content: req.body.content,
     //         userId: req.body.userId,
-    //         imageProfil: req.body.imageProfil
-    //         })
-    
-    //         .then(response => {
+    //         imageProfil: req.body.imageProfil})
+    //             .then(response => {
     //             const message = 'Message modifié !'
     //             res.status(201).json({ message, response})
-    //         })
-    //         .catch(error => res.status(400).json({ error }))
-    // }
-
-
-    console.log(message.imageUrl)
-   const id = req.params.id
-   Message.update(req.body, {where: { id: id }})
-   .then(_ => {
-       Message.findByPk(id)
-        .then(response => {
-            const message = 'Message modifié !'
-            res.status(201).json({ message, response})
-        })
-        .catch(error => res.status(400).json({ error }))
-    })
-    .catch(error => res.status(400).json({ error }))
+    //             })
+    //             .catch(error => res.status(400).json({ error }))
+    //     }
+    // -----------------------------------------------------
 }
 
 exports.deleteMessage = (req, res, next) => {

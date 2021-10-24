@@ -168,10 +168,9 @@ export default {
 
         console.log(this.selectedFile)
         // let newMessage;
-        // if(this.selectedFile != null) {
-        //   newFormData.append('image', this.selectedFile, this.selectedFile.name)
-        // }
-        newFormData.append('image', this.selectedFile, this.selectedFile.name)
+        if(this.selectedFile != null) {
+          newFormData.append('image', this.selectedFile, this.selectedFile.name)
+        }
         newFormData.append('content', singleMessage.content)
         console.log(newFormData)
         axios.put(`http://localhost:3000/api/messages/${singleMessage.id}`, newFormData)

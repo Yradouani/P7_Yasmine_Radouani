@@ -115,47 +115,27 @@ exports.updateUser = (req, res, next) => {
         .catch(error => res.status(400).json({ error }))
     })
     .catch(error => res.status(400).json({ error }))
-    // if (req.body.firstname && req.body.lastname) {
-    //     db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
-    //         if (err) {
-    //             res.json(error(err.message))
-    //         } else {
-    //             if (result[0] != undefined) {
-    //                 db.query('SELECT * FROM users WHERE fistname = ? AND lastname = ? AND id != ?', [req.body.firstname, req.body.lastname, req.params.id], (err, result) => {
-    //                     if (err) {
-    //                         res.json(error(err.message))
-    //                     } else {
-    //                         if (result[0] != undefined) {
-    //                             res.json(error('Un compte est déjà créé avec ce nom et ce prénom'))
-    //                         } else {
-    //                             db.query('UPDATE users SET name = ? WHERE id = ?', [req.body.firstname, req.params.id], (err, result) => {
-    //                                 if (err) {
-    //                                     res.json(error(err.message))
-    //                                 } else {
-    //                                     res.json(success(true))
-    //                                 }
-    //                             })
-    //                         }
-    //                     }
-    //                 })
-    //             }
-    //         }
-    //     })
-    // }
 }
 
 exports.deleteUser = (req, res, next) => {
-    User.findByPk({ userId: req.params.userId })
+    User.findOne({where: { userId: req.params.userId }})
     .then(user => {
-      const filename = user.imageProfil.split('/images/')[1];
-      fs.unlink(`images/${filename}`, () => {
+      if(user.imageProfil){
+        const filename = user.imageProfil.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            User.destroy({ where: { userId: req.params.userId } })
+                .then(() => res.status(200).json({ message: 'Compte utilisateur supprimé !'}))
+                .catch(error => res.status(400).json({ error }));
+        });
+      } else {
         User.destroy({ where: { userId: req.params.userId } })
-            .then(() => res.status(200).json({ message: 'Utilisateur supprimé !'}))
-            .catch(error => res.status(400).json({ error }));
-      });
+                .then(() => res.status(200).json({ message: 'Compte utilisateur supprimé !'}))
+                .catch(error => res.status(400).json({ error }));
+    }
     })
     .catch(error => res.status(400).json({ error }))
 }
+
     // db.query('SELECT * FROM users WHERE id = ?', [req.params.id], (err, result) => {
     //     if (err) {
     //         res.json(error(err.message))
