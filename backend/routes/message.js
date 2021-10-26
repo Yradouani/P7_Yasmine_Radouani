@@ -3,6 +3,7 @@ const router = express.Router();
 const {getAllMessages, getMessagesFromSingleUser, createMessage, updateMessage, deleteMessage, likeMessage} = require ('./../controllers/message-controllers.js');
 const multerImage = require ('../middleware/multer-config.js');
 const authorization = require ('../middleware/auth.js');
+const administrator = require ('../middleware/auth.js');
 
 router.get('/', getAllMessages);
 router.get('/:userId', getMessagesFromSingleUser);

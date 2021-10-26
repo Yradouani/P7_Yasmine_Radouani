@@ -4,9 +4,21 @@ const bcrypt = require ('bcrypt')
 const jwt = require ('jsonwebtoken')
 const dotenv = require ('dotenv')
 dotenv.config()
-
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+const passwordRegex = /^(?=.*\d).{4,8}$/;
 // Création d'un compte utilisateur
 exports.signUp = (req, res, next) => {
+  if(req.body.email == null || req.body.password == null || req.body.firstname == null || req.body.lastname == null){
+    return res.status(400).json({ 'error': 'missing parameters' });
+  }
+  if (req.body.firstname.length > 20 || req.body.firstname.length < 3) {
+    return res.status(400).json({ 'error': 'wrong firstname (length must be between 3-20 characters' });
+  }
+  if (req.body.lastname.length > 20 || req.body.lastname.length < 3) {
+    return res.status(400).json({ 'error': 'wrong lastname (length must be between 3-20 characters' });
+  }
+  if(!emailRegex.test(req.body.email))
+
     bcrypt.hash(req.body.password, 10)
     .then(hash => {
       console.log('En cours de création nouvel utilisateur')
