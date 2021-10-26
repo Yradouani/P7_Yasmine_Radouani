@@ -26,7 +26,7 @@
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
-        <span id="img-user-container" v-if="singleMessage.imageProfil">
+        <span id="img-user-container" v-if="singleMessage.imageProfil != null">
           <img :src="singleMessage.imageProfil" alt="" id="img-user">
         </span>
         <span id="first-and-last-name">{{ singleMessage.firstname }} {{ singleMessage.lastname }}</span>
@@ -52,7 +52,7 @@
         <!-- <img :src="messageToUpdate.imageUrl" alt=""> -->
         <hr>
         <div>
-          <button id="update-message" @click="save(singleMessage)">Sauvegarder</button>
+          <button id="update-message" @click="save(singleMessage)" @keypress.enter="save(singleMessage)">Sauvegarder</button>
           <button id="cancel" @click="cancel()">Annuler</button>
         </div>
       </div>

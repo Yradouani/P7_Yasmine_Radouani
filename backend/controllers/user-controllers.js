@@ -6,6 +6,7 @@ const dotenv = require ('dotenv')
 dotenv.config()
 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const passwordRegex = /^(?=.*\d).{4,8}$/;
+
 // Création d'un compte utilisateur
 exports.signUp = (req, res, next) => {
   if(req.body.email == null || req.body.password == null || req.body.firstname == null || req.body.lastname == null){
@@ -17,7 +18,12 @@ exports.signUp = (req, res, next) => {
   if (req.body.lastname.length > 20 || req.body.lastname.length < 3) {
     return res.status(400).json({ 'error': 'wrong lastname (length must be between 3-20 characters' });
   }
-  if(!emailRegex.test(req.body.email))
+  if(!emailRegex.test(req.body.email)){
+    return res.status(400).json({ 'error': 'email invalid' });
+  }
+  if(!passwordRegex.test(req.body.password)){
+    return res.status(400).json({ 'error': 'password invalid (must have 8 characters, 1 letter)' });
+  }
 
     bcrypt.hash(req.body.password, 10)
     .then(hash => {

@@ -72,68 +72,68 @@ exports.updateMessage = (req, res, next) => {
     // .catch(error => res.status(400).json({ error }));
 
     // ------------------------------------------
-    let message
-    if(req.file){
-            message = new Message({
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-                content: req.body.content,
-                userId: req.body.userId,
-                imageProfil: req.body.imageProfil
-            })
-        } else {
-            message = new Message({
-                firstname: req.body.firstname,
-                lastname: req.body.lastname,
-                content: req.body.content,
-                userId: req.body.userId,
-                imageProfil: req.body.imageProfil
-            })
-        }
-    console.log(req.file)
-        console.log(message.imageUrl)
-        const id = req.params.id
-        Message.update(req.body, {where: { id: id }})
-        .then(_ => {
-            Message.findByPk(id)
-                .then(response => {
-                    const message = 'Message modifié !'
-                    res.status(201).json({ message, response})
-                })
-                .catch(error => res.status(400).json({ error }))
-            })
-            .catch(error => res.status(400).json({ error }))
-
-    // -------------------------------------------------
+    // let message
     // if(req.file){
-    //         Message.update({where: { id: req.params.id }}, {
-    //                         firstname: req.body.firstname,
-    //                         lastname: req.body.lastname,
-    //                         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    //                         content: req.body.content,
-    //                         userId: req.body.userId,
-    //                         imageProfil: req.body.imageProfil
-    //                     }
-    //         )
-    //     .then(response => {
-    //         const message = 'Message modifié !'
-    //         res.status(201).json({ message, response})
-    //     })
-    //     .catch(error => res.status(400).json({ error }))
-    // } else {
-    //     Message.update({where: { id: req.params.id }}, {
-    //         firstname: req.body.firstname,
-    //         lastname: req.body.lastname,
-    //         content: req.body.content,
-    //         userId: req.body.userId,
-    //         imageProfil: req.body.imageProfil})
+    //         message = new Message({
+    //             firstname: req.body.firstname,
+    //             lastname: req.body.lastname,
+    //             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    //             content: req.body.content,
+    //             userId: req.body.userId,
+    //             imageProfil: req.body.imageProfil
+    //         })
+    //     } else {
+    //         message = new Message({
+    //             firstname: req.body.firstname,
+    //             lastname: req.body.lastname,
+    //             content: req.body.content,
+    //             userId: req.body.userId,
+    //             imageProfil: req.body.imageProfil
+    //         })
+    //     }
+    // console.log(req.file)
+    //     console.log(message.imageUrl)
+    //     const id = req.params.id
+    //     Message.update(req.body, {where: { id: id }})
+    //     .then(_ => {
+    //         Message.findByPk(id)
     //             .then(response => {
-    //             const message = 'Message modifié !'
-    //             res.status(201).json({ message, response})
+    //                 const message = 'Message modifié !'
+    //                 res.status(201).json({ message, response})
     //             })
     //             .catch(error => res.status(400).json({ error }))
-    //     }
+    //         })
+    //         .catch(error => res.status(400).json({ error }))
+
+    // -------------------------------------------------
+    if(req.file){
+            Message.update({
+                            firstname: req.body.firstname,
+                            lastname: req.body.lastname,
+                            imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+                            content: req.body.content,
+                            userId: req.body.userId,
+                            imageProfil: req.body.imageProfil
+                        }, {where: { id: req.params.id }}
+            )
+        .then(response => {
+            const message = 'Message modifié !'
+            res.status(201).json({ message, response})
+        })
+        .catch(error => res.status(400).json({ error }))
+    } else {
+        Message.update({
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            content: req.body.content,
+            userId: req.body.userId,
+            imageProfil: req.body.imageProfil}, {where: { id: req.params.id }})
+                .then(response => {
+                const message = 'Message modifié !'
+                res.status(201).json({ message, response})
+                })
+                .catch(error => res.status(400).json({ error }))
+        }
     // -----------------------------------------------------
 }
 
@@ -161,5 +161,20 @@ exports.deleteMessage = (req, res, next) => {
     //     .catch(error => res.status(400).json({ error }));
 }
 exports.likeMessage = (req, res, next) => {
-   
+    let like = req.body.like;
+    let userId = req.body.userId;
+
+    if(like == 1){
+        Message.update({ id: req.params.id }, { 
+            like: like++,
+            usersLiked: userId
+        })
+    }
+    // .then(function(array){
+    //     var newArr = [];
+    //     array.forEach(function(elem){
+    //         newArr.push(fn(elem);
+    //     }
+    //     return newArr;
+    //  });
 }

@@ -39,16 +39,16 @@ const message = (sequelize, DataTypes) => {
             default: 0,
             allowNull: true
         },
-        usersLike: {
-            type: DataTypes.STRING,
-            allowNull: true,
-            get() {
-                return this.getDataValue('usersLike').split(';')
-            },
-            set(val) {
-            this.setDataValue('usersLike',val.join(';'));
-            },
-        }
+        // usersLike: {
+        //     type: DataTypes.STRING,
+        //     allowNull: true,
+        //     get() {
+        //         return this.getDataValue('usersLike').split(';')
+        //     },
+        //     set(val) {
+        //     this.setDataValue('usersLike',val.join(';'));
+        //     },
+        // }
     })
 }
 module.exports = message; 
