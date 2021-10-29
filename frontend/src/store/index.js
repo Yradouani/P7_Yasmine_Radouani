@@ -109,7 +109,10 @@ const store = createStore ({
                     commit('userInfos', response.data.user);
                 })
                 .catch(error => console.log(error))
-            }
+            },
+        // updateProfil: ({commit}) => {
+
+        // }
             // request.get('/users')
             //     .then(function (response) {
             //         commit('userInfos', response.data);

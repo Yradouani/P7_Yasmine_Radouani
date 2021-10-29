@@ -64,13 +64,15 @@
 <script>
 // import { ref } from 'vue';
 // import store from '@/store/index.js'
+// import router from '../router/index.js'
 import axios from 'axios';
 import { mapState } from 'vuex';
 export default {
   name: 'profile',
   mounted: function () {
     console.log(this.$store.state.user);
-    if (this.$store.state.user.userId < 1 || this.$store.state.user== null) {
+    if (this.$store.state.user.userId < 1 || this.$store.state.user== null || this.user == null) {
+      this.logout();
       this.$router.push('/');
       return;
     }

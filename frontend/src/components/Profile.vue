@@ -19,7 +19,21 @@
     </div>
     <div id="buttons">
       <div id="buttons-update-and-logout">
-        <button id="update-profile">Modifier mon profil</button>
+        <button id="update-profile" @click="updateUser()">Modifier mon image de profil</button>
+        <!-------------------------------------------------------------------------------------->
+        <div v-if="userToUpdate" id="user-to-update-container">
+        <span id="update-header-text">Modifier votre image de profil</span>
+        
+          <label for="new-picture" class="new-file" id="new-picture-container">Choisir une nouvelle image de profil</label>
+          <input type="file" @change="onFileSelected" id="new-picture">
+        
+        <hr>
+        <div>
+          <button id="update-user" @click="save(singleMessage)" @keypress.enter="save(singleMessage)">Sauvegarder</button>
+          <button id="cancel" @click="cancelUpdate()">Annuler</button>
+        </div>
+      </div>
+      <!-------------------------------------------------------------------------------------->
         <button id="logout" @click="logout()">Se déconnecter</button>
       </div>
       <button @click="deleteAccount()" id="delete-user">Je souhaite supprimer mon compte ?</button>
@@ -38,6 +52,7 @@
 // import axios from 'axios'
 import {mapState} from 'vuex';
 import axios from 'axios';
+import { cacheAdapterEnhancer } from 'axios-extensions';
 export default {
   name: 'profile',
   mounted: function () {
@@ -47,11 +62,14 @@ export default {
       return;
     }
     this.$store.dispatch('getUserInfos');
+
   },
   data() {
     return {
       iWantToDeleteAccount: false,
       userLocalStorage: JSON.parse(localStorage.getItem('user')),
+      userToUpdate: "",
+      selectedFile: null,
     };
   },
   computed: {
@@ -64,20 +82,64 @@ export default {
       this.$store.commit('logout');
       this.$router.push('/');
     },
+    findUserInfos: function () {
+      const http = axios.create({
+            baseURL: '/',
+            headers: { 'Cache-Control': 'no-cache' },
+            // cache will be enabled by default
+            adapter: cacheAdapterEnhancer(axios.defaults.adapter)
+        });
+        http.get(`http://localhost:3000/api/users/${this.user.userId}`)
+          .then(response => {
+              console.log(response);
+              console.log(response.data.user)
+              this.user.imageProfil = response.data.user.imageProfil
+            })
+          .catch(error => console.log(error))
+    },
     deleteAccount: function () {
       this.iWantToDeleteAccount = true;
     },
     cancel: function () {
       this.iWantToDeleteAccount = false;
     },
+    updateUser: function () {
+      this.userToUpdate = this.user.firstname + this.user.lastname
+    },
+    onFileSelected: function (e) {
+        console.log(e);
+        this.selectedFile = e.target.files[0];
+        console.log(this.selectedFile)
+      },
+    save: function () {       
+        let newFormData = new FormData();
+        console.log(this.selectedFile)
+        // let newMessage;
+        if(this.selectedFile != null) {
+          newFormData.append('image', this.selectedFile, this.selectedFile.name)
+        }
+        axios.put(`http://localhost:3000/api/users/${this.user.userId}`, newFormData)
+          .then(response => {
+              console.log(response);
+              this.findUserInfos();
+              console.log(this.user.imageProfil)
+            })
+          .catch(error => console.log(error))
+          this.userToUpdate = null;
+    },
+    cancelUpdate: function () {
+      this.userToUpdate = "";
+    },
     deleteUser: function () {
       axios.delete(`http://localhost:3000/api/users/${this.user.userId}`)
               .then(response => {
                   this.message = response;
                   console.log("Suppression de l'utilisateur")
+                  this.$store.commit('logout');
                   this.$router.push('/');
               })
               .catch(error => console.log(error))
+      this.$router.push('/');
     },
   }
 }
@@ -152,6 +214,7 @@ a {
   border-radius: 20px;
   width: 60%;
   margin-top: 50px;
+  margin-bottom: 50px;
 }
 #first-last-name {
   display: flex;
@@ -207,5 +270,62 @@ a {
   height: 30px;
   background-color: white;
   font-weight: bold;
+}
+#user-to-update-container{
+  position: fixed;
+  width: 80%;
+  height: 300px;
+  top: 20%;
+  border: 1.5px solid black;
+  left: 5%;
+  right: 5%;
+  background-color: white;
+  padding: 20px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+}
+#update-header-text{
+  font-size: 20px;
+  font-weight: bold;
+}
+#update-header-text::placeholder {
+  position: relative;
+  top: 10px;
+  margin-bottom: 30px;
+}
+#update-text-input{
+  width: 100%;
+  padding: 0;
+  margin: 20px 0;
+  border: none;
+  height: 200px;
+  display: flex;
+}
+#update-user, #cancel{
+  background-color: white;
+  margin: 10px 30px;
+  width: 100px;
+}
+#new-picture-container{
+  border: 1px dashed black;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+hr {
+  width: 100%;
+  height: 1px;
+  color: rgb(108, 151, 151);
+  border: none;
+  background-color: rgb(108, 151, 151);
+}
+.new-file{
+  cursor: pointer;
+}
+#new-picture{
+  display: none;
 }
 </style>

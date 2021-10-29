@@ -4,7 +4,8 @@ const MIME_TYPES = {
     'image/jpg': 'jpg',
     'image/jpeg': 'jpg',
     'image/png': 'png',
-    'image/bmp': 'bmp'
+    'image/bmp': 'bmp',
+    // 'image/gif' : 'gif'
 
   };
   

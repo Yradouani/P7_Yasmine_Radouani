@@ -22,7 +22,7 @@ exports.signUp = (req, res, next) => {
     return res.status(400).json({ 'error': 'email invalid' });
   }
   if(!passwordRegex.test(req.body.password)){
-    return res.status(400).json({ 'error': 'password invalid (must have 8 characters, 1 letter)' });
+    return res.status(400).json({ 'error': 'password invalid (must length 4 - 8 characters include 1 letter)' });
   }
 
     bcrypt.hash(req.body.password, 10)
@@ -45,6 +45,7 @@ exports.signUp = (req, res, next) => {
           password: hash,
           firstname: req.body.firstname,
           lastname: req.body.lastname,
+          imageProfil: `${req.protocol}://${req.get('host')}/images/not_picture.jpg`,
         });
       }
       
@@ -120,36 +121,48 @@ exports.getOneUser = (req, res, next) => {
         .catch(error => res.status(404).json({ error }))
 }
 exports.updateUser = (req, res, next) => {
-    const userId = req.params.userId
-    User.update(req.body, {
-       where: { userId: userId }
-   })
-   .then(_ => {
-       User.findOne(userId)
-        .then(response => {
-            const message = 'Utilisateur modifié !'
-            res.status(201).json({ message, response})
-        })
-        .catch(error => res.status(400).json({ error }))
-    })
-    .catch(error => res.status(400).json({ error }))
+    User.update({
+                    firstname: req.body.firstname,
+                    lastname: req.body.lastname,
+                    imageProfil: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+                }, {where: { userId: req.params.userId }}
+    )
+      .then(response => {
+          const message = 'Utilisateur modifié !'
+          res.status(201).json({ message, response})
+          return response
+      })
+      .catch(error => res.status(400).json({ error }))
+  //   const userId = req.params.userId
+  //   User.update(req.body, {
+  //      where: { userId: userId }
+  //  })
+  //  .then(_ => {
+  //      User.findOne(userId)
+  //       .then(response => {
+  //           const message = 'Utilisateur modifié !'
+  //           res.status(201).json({ message, response})
+  //       })
+  //       .catch(error => res.status(400).json({ error }))
+  //   })
+  //   .catch(error => res.status(400).json({ error }))
 }
 
 exports.deleteUser = (req, res, next) => {
     User.findOne({where: { userId: req.params.userId }})
     .then(user => {
-      if(user.imageProfil){
-        const filename = user.imageProfil.split('/images/')[1];
-        fs.unlink(`images/${filename}`, () => {
-            User.destroy({ where: { userId: req.params.userId } })
-                .then(() => res.status(200).json({ message: 'Compte utilisateur supprimé !'}))
-                .catch(error => res.status(400).json({ error }));
-        });
-      } else {
+      // if(user.imageProfil){
+      //   const filename = user.imageProfil.split('/images/')[1];
+      //   fs.unlink(`images/${filename}`, () => {
+      //       User.destroy({ where: { userId: req.params.userId } })
+      //           .then(() => res.status(200).json({ message: 'Compte utilisateur supprimé !'}))
+      //           .catch(error => res.status(400).json({ error }));
+      //   });
+      // } else {
         User.destroy({ where: { userId: req.params.userId } })
                 .then(() => res.status(200).json({ message: 'Compte utilisateur supprimé !'}))
                 .catch(error => res.status(400).json({ error }));
-    }
+    // }
     })
     .catch(error => res.status(400).json({ error }))
 }
