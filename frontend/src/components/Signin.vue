@@ -13,23 +13,32 @@
       <span @click="switchToLogin()" id="connect">Se connecter</span>
     </div>
     <div id="input-container">
+      <label>
       <input
         type="text"
         id="email"
         v-model="email"
         placeholder="Adresse mail"
       />
+      <span id="control-text" v-if="!formEmail">Adresse email invalide</span>
+      </label>
       <div id="firstname-lastname" v-if="mode == 'create'">
         <input type="text" id="firstname"
           v-model="firstname"
           placeholder="Prénom"
         />
+        
         <input
           type="text"
           id="lastname"
           v-model="lastname"
           placeholder="Nom"
         />
+        
+      </div>
+      <div id="control-text-container">
+        <span id="control-text" v-if="!formFirstName">Prénom invalide</span>
+        <span id="control-text" v-if="!formLastName">Nom invalide</span>
       </div>
       <label for="" id="password-label">
           <input
@@ -43,6 +52,7 @@
           <i class="fas fa-eye" id="on" v-else @click="switchToHidePassword()"></i>
         </div>
       </label>
+      <span id="control-text" v-if="!formPassword">Mot de passe invalide (entre 3 et 8 charactères dont 1 lettre)</span>
       <label for="add-picture" class="label-file" v-if="mode == 'create'">Choisir une image de profil</label>
       <input type="file" @change="onFileSelected" id="add-picture">
     </div>
@@ -76,6 +86,10 @@ export default {
       passwordMode: "hide",
       visibility: "password",
       selectedFile: null,
+      formFirstName: true,
+      formLastName: true,
+      formEmail: true,
+      formPassword: true,
     };
   },
   mounted: function () {
@@ -130,8 +144,40 @@ export default {
     regExFLC: function (value) {
         return /^[A-Z\-a-z-àâäãçéèêëìîïòôöõùûüñ-]{3,20}$/.test(value);
     },
+    regExPassword: function (value) {
+      return /^(?=.*\d).{4,8}$/.test(value);
+    },
+    regExEmail: function (value) {
+      return /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+    },
     createAccount: function (){
       const self = this;
+      //Vérification du format des données du formulaire
+      //Vérification du prénom (3 lettres minimum sans chiffre)
+        if(this.regExFLC(this.firstname)){
+            this.formFirstName = true;           
+        }else{
+            this.formFirstName = false;    
+        }
+      //Vérification du nom (3 lettres minimum sans chiffre)
+        if(this.regExFLC(this.lastname)){
+            this.formLastName = true;           
+        }else{
+            this.formLastName = false;    
+        }
+      //Vérification de l'adresse mail
+      if(this.regExEmail(this.email)){
+            this.formEmail = true;           
+        }else{
+            this.formEmail = false;    
+        }
+      //Vérification du mot de passe (1 lettre minimum)
+      if(this.regExPassword(this.password)){
+            this.formPassword = true;           
+        }else{
+            this.formPassword = false;    
+        }
+
       console.log(this.email, this.firstname, this.lastname, this.password);
       const formData = new FormData();
       if(this.selectedFile != null){
@@ -210,6 +256,7 @@ h1 {
   justify-content: center;
   margin-top: 20px;
   flex-direction: column;
+  margin-bottom: 50px;
 }
 input {
   background-color: aliceblue;
@@ -255,11 +302,10 @@ input:focus{
   width: 80%;
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   margin: auto;
 }
 #email {
-  width: 100%;
+  width: 96%;
 }
 #password {
   width: 96%;
@@ -298,6 +344,18 @@ input:focus{
 .button--disabled:hover {
     cursor:not-allowed;
     background:#cecece;
+}
+#control-text{
+  font-size: 12px;
+  color: red;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+}
+#control-text-container{
+  display: flex;
+  margin: 7px;
+  justify-content: space-between;
 }
 
 </style>
