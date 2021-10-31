@@ -228,7 +228,7 @@ a {
   margin: 0 20px;
 }
 #image-container {
-  width: 55%;
+  width: 70%;
   height: 350px;
   overflow: hidden;
   margin: 20px auto;
@@ -327,5 +327,15 @@ hr {
 }
 #new-picture{
   display: none;
+}
+@media (max-width: 800px){
+  #profil-container{
+    width: 85%;
+  }
+}
+@media (max-width: 600px){
+  #message_imageurl{
+    width: 90%;
+  }
 }
 </style>

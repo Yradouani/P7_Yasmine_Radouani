@@ -38,7 +38,7 @@
         </div>
       </div>
       <hr>
-      <div>
+      <div id="like-delete-update-container">
         <span id="like" @click="likeMessage()"><i class="far fa-thumbs-up"></i> J'aime</span>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin == true)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
@@ -67,6 +67,7 @@
 // import router from '../router/index.js'
 import axios from 'axios';
 import { mapState } from 'vuex';
+// import { cacheAdapterEnhancer } from 'axios-extensions';
 export default {
   name: 'profile',
   mounted: function () {
@@ -104,6 +105,12 @@ export default {
   },
   methods: {
       getAllMessages: function (){
+        // const http = axios.create({
+        //     baseURL: '/',
+        //     headers: { 'Cache-Control': 'no-cache' },
+        //     // cache will be enabled by default
+        //     adapter: cacheAdapterEnhancer(axios.defaults.adapter)
+        // });
         axios.get('http://localhost:3000/api/messages')
           .then((response) => {
             this.allMessages = response.data
@@ -136,6 +143,7 @@ export default {
           axios.post('http://localhost:3000/api/messages', formData)
             .then(response => {
               console.log(response);
+              this.getAllMessages();
             })
             .catch(error => console.log(error))
       
@@ -150,7 +158,8 @@ export default {
               .then(response => {
                   this.message = response;
                   this.allMessages = self.allMessages.filter(m => m.id !== singleMessage.id);
-                  console.log('Message effacé')
+                  console.log('Message effacé');
+                  this.getAllMessages();
               })
               .catch(error => console.log(error))
           this.getAllMessages();
@@ -362,9 +371,12 @@ input:focus{
   justify-content: space-between;
   flex-direction: column;
 }
-#trash i, #update i, #like i, #dislike i{
+#trash i, #update i, #like i{
   font-size: 15px;
   margin-left: 25px;
+  
+}
+#trash, #update, #like{
   cursor: pointer;
 }
 #trash, #update{
@@ -432,9 +444,15 @@ input:focus{
   align-items: center;
   margin: 20px;
 }
+#like-delete-update-container{
+  margin: 5px;
+}
 @media (max-width: 700px){
   #all-message-container{
     width: 100%;
+  }
+  #message_imageurl{
+    width: 90%;
   }
 }
 </style>

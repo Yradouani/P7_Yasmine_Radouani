@@ -23,23 +23,25 @@
       <span id="control-text" v-if="!formEmail">Adresse email invalide</span>
       </label>
       <div id="firstname-lastname" v-if="mode == 'create'">
+        <div id="control-first-name">
         <input type="text" id="firstname"
           v-model="firstname"
           placeholder="Prénom"
         />
-        
+        <span id="control-text" v-if="!formFirstName">Prénom invalide</span>
+        </div>
+        <div id="control-last-name">
         <input
           type="text"
           id="lastname"
           v-model="lastname"
           placeholder="Nom"
         />
+        <span id="control-text" v-if="!formLastName">Nom invalide</span>
+        </div>
         
       </div>
-      <div id="control-text-container">
-        <span id="control-text" v-if="!formFirstName">Prénom invalide</span>
-        <span id="control-text" v-if="!formLastName">Nom invalide</span>
-      </div>
+      
       <label for="" id="password-label">
           <input
         :type="visibility" 
@@ -316,11 +318,11 @@ input:focus{
   justify-content: space-between;
 }
 #firstname {
-  width: 50%;
+  width: 90%;
   margin-right: 20px;
 }
 #lastname {
-  width: 50%;
+  width: 90%;
 }
 #create_account,
 #connect {
@@ -351,11 +353,21 @@ input:focus{
   font-weight: bold;
   display: flex;
   align-items: center;
+  margin: 7px;
+}
+#control-last-name{
+  width: 45%;
+}
+#control-first-name{
+  width: 45%;
 }
 #control-text-container{
   display: flex;
-  margin: 7px;
   justify-content: space-between;
 }
-
+@media (max-width: 600px){
+  #connexion{
+    width: 70%;
+  }
+}
 </style>
