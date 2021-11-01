@@ -61,11 +61,11 @@
     <!-- <div v-if="mode == 'login' && status == 'error_login'">Adresse mail et/ou mot de passe invalide</div> -->
     <!-- <div v-if="mode == 'login' && status == 'error_create'">Adresse mail déjà utilisée</div> -->
     
-      <button @click="login()" v-if="mode == 'login'" class="button" :class="{'button--disabled' : !validatedFields}">
+      <button @click="login()" v-if="mode == 'login'" class="button" :class="{'button--disabled' : !validatedFields, 'button-anim' : !formPassword}">
         <span v-if="status == 'loading'">En cours de connexion...</span>
         <span v-else>Connexion</span>
       </button>
-      <button @click="createAccount()" class="button" :class="{'button--disabled' : !validatedFields}" v-else>
+      <button @click="createAccount()" class="button" :class="{'button--disabled' : !validatedFields, 'button-anim' : !formPassword, 'button-anim': !formLastName, 'button-anim': !formFirstName, 'button-anim': !formEmail}" v-else>
         <span v-if="status == 'loading'">En cours de création...</span>
         <span v-else>Inscription</span>
       </button>
@@ -364,6 +364,29 @@ input:focus{
 #control-text-container{
   display: flex;
   justify-content: space-between;
+}
+.button-anim:active{
+  animation: nope .5s forwards;
+}
+@keyframes nope {
+  0% {
+    transform: translateX(0px);
+  }
+  20% {
+    transform: translateX(-15px);
+  }
+  40% {
+    transform: translateX(15px);
+  }
+  60% {
+    transform: translateX(-15px);
+  }
+  80% {
+    transform: translateX(15px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
 }
 @media (max-width: 600px){
   #connexion{

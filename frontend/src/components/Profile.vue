@@ -1,12 +1,17 @@
 <template>
 <div id="header-container">
     <img src="../assets/logo.png" alt="logo" id="logo" >
-    <router-link to="/forum">
-    <div id="forum-access">
-      <i class="fas fa-comments"></i>
-      <span>Accéder au forum</span>
+    <div id="dropdown">
+      <button class="btn-top" @click="openDropDown"><i class="fas fa-bars"></i></button>     
+      <div class="bloc-links" v-if="dropdown">
+        <ul>
+          <router-link to="/forum"><li>Forum</li></router-link>
+          <li>Se déconnecter</li>
+          <li><a href="mailto:contact@groupomania.com">Nous contacter</a></li>
+          <li>À propos</li>
+        </ul>
+      </div>
     </div>
-  </router-link>
   </div>
   <h1>Bienvenu sur votre profil {{ user.firstname }} !</h1>
   <div id="profil-container">
@@ -70,6 +75,7 @@ export default {
       userLocalStorage: JSON.parse(localStorage.getItem('user')),
       userToUpdate: "",
       selectedFile: null,
+      dropdown: "",
     };
   },
   computed: {
@@ -141,6 +147,13 @@ export default {
               .catch(error => console.log(error))
       this.$router.push('/');
     },
+    openDropDown: function () {
+      if(!this.dropdown){
+        this.dropdown = true;
+      } else {
+        this.dropdown = false;
+      }
+    },
   }
 }
 </script>
@@ -169,11 +182,14 @@ h1{
   border-radius: 5px;
 }
 #logo{
-  margin-left: 90px;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
 #header-container{
   width: 100%;
   display: flex;
+  position: relative;
 }
 #logout {
   width: 150px;
@@ -189,7 +205,7 @@ h1{
   cursor: pointer;
 }
 i {
-  font-size: 30px;
+  font-size: 20px;
   color: rgb(189, 195, 196);
 }
 a {
@@ -197,13 +213,49 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
-#forum-access {
+#dropdown{
   position: absolute;
-  right: 20px;
-  top: 20px;
+  top: 25px;
+  right: 30px;
   display: flex;
   flex-direction: column;
-  transition : all 200ms;
+  justify-content: center;
+  background-color: white;
+  padding: 10px;
+  opacity: 0.9;
+}
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateX(100);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.bloc-links{
+  animation: apparition 1s ease-out;
+}
+ul {
+  padding: 0;
+  animation: apparition 1s ease-out;
+}
+ul li {
+  list-style: none;
+  cursor: pointer;
+  margin: 10px;
+}
+ul li:hover, .btn-top i:hover {
+  color: rgb(128, 124, 145);
+}
+.btn-top {
+  border: none;
+  background: white;
+  cursor: pointer;
+}
+.btn-top i {
+  color: black;
 }
 #forum-access:hover {
   transform: scale(1.01);
@@ -336,6 +388,11 @@ hr {
 @media (max-width: 600px){
   #message_imageurl{
     width: 90%;
+  }
+}
+@media (min-width: 650px){
+  #image-container{
+    height: 500px;
   }
 }
 </style>

@@ -9,9 +9,17 @@
       </div>
       <div id="dropdown" v-if="dropdown">
           <span @click="closeDropDown"><i class="fas fa-times" id="cross"></i></span>
+          
           <ul>
+            <hr>
             <router-link to="/profile"><li>Mon profil</li></router-link>
+            <hr>
             <li @click="logout()">Me déconnecter</li>
+            <hr>
+            <li><a href="mailto:contact@groupomania.com">Nous contacter</a></li>
+            <hr>
+            <li>À propos</li>
+            <hr>
           </ul>
       </div>
   </div>
@@ -303,7 +311,7 @@ i {
   transition : all 200ms;
   position: absolute;
   top: 20px;
-  right: 20px;
+  left: 20px;
 }
 #img-user-container{
   width: 35px;
@@ -461,29 +469,51 @@ input:focus{
   margin: 5px;
 }
 #dropdown{
-  position: absolute;
-  right: 0;
+  position: fixed;
+  left: 0;
   top: 0;
-  background-color: rgba(144, 188, 206, 1);
+  background-color: rgb(43, 44, 45);
   color: white;
-  height: 210px;
-  width: 150px;
+  height: 1000px;
+  width: 180px;
   display: flex;
-  align-items: center;
-  justify-content: center;
   flex-direction: column;
+  animation: apparition 0.8s  ease-out;
+}
+@keyframes apparition {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 #dropdown ul{
  list-style: none;
  padding: 0;
+ margin-top: 60px;
 }
 a {
   text-decoration: none;
 }
 ul li {
-  margin: 10px;
+  margin: 20px;
   cursor: pointer;
+  /* animation: glissement 2s  ease-out; */
 }
+/* @keyframes glissement {
+    from {
+      transform: translateY(0);
+      opacity: 0;
+    }
+  
+    to {
+      transform: translateY(1);
+      opacity: 1;
+    }
+  } */
 ul li:hover {
   color: rgb(56, 82, 104);
 }
@@ -501,6 +531,13 @@ ul li:hover {
 }
 #cross:hover {
   color: rgb(56, 82, 104);
+}
+#dropdown hr {
+  width: 100%;
+  height: 1px;
+  color: white;
+  border: none;
+  background-color: white;
 }
 @media (max-width: 700px){
   #all-message-container{
