@@ -34,11 +34,6 @@ const message = (sequelize, DataTypes) => {
             default: 0,
             allowNull: true
         },
-        dislikes : {
-            type: DataTypes.INTEGER, 
-            default: 0,
-            allowNull: true
-        },
         // usersLike: {
         //     type: DataTypes.STRING,
         //     allowNull: true,

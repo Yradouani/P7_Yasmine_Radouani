@@ -1,15 +1,19 @@
 <template>
   <div id="header-container">
-      <button id="logout" @click="logout()">Se déconnecter</button>
     <img src="../assets/logo.png" alt="logo" id="logo" >
-    <router-link to="/profile">
-      <div id="profile-container">
+    
+      <div id="profile-container" @click="openDropDown" v-if="!dropdown">
         <span id="img-profil-container" >
           <img :src="user.imageProfil" alt="" id="img-user" v-if="user.imageProfil">
         </span>
-        <span id="profile">Mon profil</span>
       </div>
-    </router-link>
+      <div id="dropdown" v-if="dropdown">
+          <span @click="closeDropDown"><i class="fas fa-times" id="cross"></i></span>
+          <ul>
+            <router-link to="/profile"><li>Mon profil</li></router-link>
+            <li @click="logout()">Me déconnecter</li>
+          </ul>
+      </div>
   </div>
   <h1>Bienvenue dans le forum {{ user.firstname }} !</h1>
   <div id="message_container">
@@ -101,6 +105,7 @@ export default {
       messageToUpdate: "",
       userInLocalStorage: JSON.parse(localStorage.getItem('user')),
       allMessagesReverse: '',
+      dropdown: '',
     };
   },
   methods: {
@@ -200,6 +205,12 @@ export default {
       validatedFields: function () {
         this.content != '';
       },
+      openDropDown: function () {
+        this.dropdown = true;
+      },
+      closeDropDown: function () {
+        this.dropdown = false;
+      },
 
   },
 
@@ -287,12 +298,12 @@ i {
   color: rgb(189, 195, 196);
 }
 #profile-container {
-  position: absolute;
-  right: 20px;
-  top: 20px;
   display: flex;
   flex-direction: column;
   transition : all 200ms;
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 #img-user-container{
   width: 35px;
@@ -305,11 +316,13 @@ i {
   height: 50px;
   border-radius: 30px;
   overflow: hidden;
+  cursor: pointer;
 }
 #img-user-container img, #img-profil-container img{
   width: 100%;
   height: 100%;
   object-fit: cover;
+  cursor: pointer;
 }
 .without-img{
   display: none;
@@ -446,6 +459,48 @@ input:focus{
 }
 #like-delete-update-container{
   margin: 5px;
+}
+#dropdown{
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: rgba(144, 188, 206, 1);
+  color: white;
+  height: 210px;
+  width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#dropdown ul{
+ list-style: none;
+ padding: 0;
+}
+a {
+  text-decoration: none;
+}
+ul li {
+  margin: 10px;
+  cursor: pointer;
+}
+ul li:hover {
+  color: rgb(56, 82, 104);
+}
+#cross {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  cursor: pointer;
+
+}
+#header-container {
+  position: relative;
+  width: 100%;
+}
+#cross:hover {
+  color: rgb(56, 82, 104);
 }
 @media (max-width: 700px){
   #all-message-container{
