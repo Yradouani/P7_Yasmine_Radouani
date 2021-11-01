@@ -388,9 +388,14 @@ input:focus{
     transform: translateX(0px);
   }
 }
-@media (max-width: 600px){
+@media (max-width: 800px){
   #connexion{
     width: 70%;
+  }
+}
+@media (max-width: 640px){
+  #connexion{
+    width: 85%;
   }
 }
 </style>

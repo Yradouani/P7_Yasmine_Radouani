@@ -20,6 +20,8 @@
             <hr>
             <li>À propos</li>
             <hr>
+            <router-link to="/allusers" v-if="user.isAdmin == true"><li>Tous les participants</li></router-link>
+            <hr v-if="user.isAdmin == true">
           </ul>
       </div>
   </div>
@@ -503,17 +505,6 @@ ul li {
   cursor: pointer;
   /* animation: glissement 2s  ease-out; */
 }
-/* @keyframes glissement {
-    from {
-      transform: translateY(0);
-      opacity: 0;
-    }
-  
-    to {
-      transform: translateY(1);
-      opacity: 1;
-    }
-  } */
 ul li:hover {
   color: rgb(56, 82, 104);
 }

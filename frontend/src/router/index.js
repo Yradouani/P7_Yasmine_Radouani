@@ -3,6 +3,7 @@ import Profile from '@/components/Profile.vue';
 import Signin from '@/components/Signin.vue';
 import Forum from '@/components/Forum.vue';
 import NotFound from '@/components/NotFound.vue';
+import AllUsers from '@/components/AllUsers.vue'
 
 const routes = [
     {
@@ -27,6 +28,14 @@ const routes = [
         component: Profile,
         meta: {
             title: 'Profile'
+        },
+    },
+    {
+        name: 'allusers',
+        path: '/allusers',
+        component: AllUsers,
+        meta: {
+            title: 'AllUsers'
         },
     },
     {

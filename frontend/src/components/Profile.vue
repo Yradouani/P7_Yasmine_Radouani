@@ -6,7 +6,7 @@
       <div class="bloc-links" v-if="dropdown">
         <ul>
           <router-link to="/forum"><li>Forum</li></router-link>
-          <li>Se déconnecter</li>
+          <li @click="logout()">Se déconnecter</li>
           <li><a href="mailto:contact@groupomania.com">Nous contacter</a></li>
           <li>À propos</li>
         </ul>
