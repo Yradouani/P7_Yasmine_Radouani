@@ -20,8 +20,11 @@
           </ul>
       </div>
       <h1>Gestion des utilisateurs</h1>
+    <div id="input-container">
+        <input v-model="searchKey" type="search" id="search" placeholder="Rechercher un utilisateur" autocomplete="off">
+    </div>
     <div id="all-users-container" v-if="allUsers.length > 0">
-      <div id="user-container" v-for="singleUser in allUsers" v-bind:key="singleUser.id">
+      <div id="user-container" v-for="singleUser in filteredUser" v-bind:key="singleUser.id">
           <div id="img-container"><img :src="singleUser.imageProfil" alt=""></div>
           <div id="informations-user">
           <span> {{ singleUser.firstname }} {{ singleUser.lastname }}</span>
@@ -67,7 +70,12 @@ export default {
   computed: {
     ...mapState({
       user: 'userInfos',
-    })
+    }),
+    filteredUser: function () {
+        return this.allUsers.filter((user) => {
+            return user.firstname.toLowerCase().includes(this.searchKey.toLowerCase())
+        })
+    },
   },
   data() {
     return {
@@ -76,6 +84,7 @@ export default {
       dropdown: "",
       iWantToDeleteAccount: "",
       userToDelete: "",
+      searchKey: "",
     };
   },
   methods: {
@@ -141,6 +150,7 @@ export default {
     margin: 10px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 #user-container:hover {
     border: 1.5px solid rgb(66, 66, 66);
@@ -261,5 +271,43 @@ a {
 }
 #confirmation{
   background-color: white;
+}
+#search {
+
+}
+input {
+  background-color: aliceblue;
+  border-radius: 5px;
+  margin: 15px 40px;
+  border: none;
+  height: 30px;
+  padding-left: 10px;
+  width: 200px;
+}
+input::placeholder {
+  color: black;
+  margin-left: 10px;
+}
+input:focus{
+  outline: none;
+  border: 2px solid rgb(171, 171, 202);
+}
+#input-container {
+    display: flex;
+}
+@media (min-width: 600px){
+    #user-container{
+        height: 170px;
+    }
+}
+@media (min-width: 750px){
+    #user-container{
+        height: 190px;
+    }
+}
+@media (min-width: 1000px){
+    #user-container{
+        height: 250px;
+    }
 }
 </style>
