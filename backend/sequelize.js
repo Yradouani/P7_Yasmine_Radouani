@@ -1,6 +1,7 @@
 const { Sequelize, DataTypes } = require ('sequelize'); 
 const MessageModel = require ('./models/message.js')
 const UserModel = require ('./models/user.js')
+const LikeModel = require ('./models/like.js')
 
     const sequelize = new Sequelize(
         'api',
@@ -22,6 +23,7 @@ const UserModel = require ('./models/user.js')
       
       const Message = MessageModel(sequelize, DataTypes)
       const User = UserModel(sequelize, DataTypes)
+      const Like = LikeModel(sequelize, DataTypes)
       
       const initDb = () => {
         sequelize.sync()
@@ -32,5 +34,5 @@ const UserModel = require ('./models/user.js')
 
 
           module.exports = {
-            initDb, Message, User
+            initDb, Message, User, Like
           }

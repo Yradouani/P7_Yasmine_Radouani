@@ -3,6 +3,7 @@ const app = require ('./app.js');
 const bodyParser = require ("body-parser");
 const userRoutes = require ('./routes/user.js');
 const messageRoutes = require ('./routes/message.js');
+const likeRoutes = require ('./routes/like.js');
 
 
 const normalizePort = val => {
@@ -23,6 +24,7 @@ const normalizePort = val => {
   app.set('port', port);
   app.use('/api/messages', messageRoutes);
   app.use('/api', userRoutes);
+  app.use('/api', likeRoutes);
 
 
   const errorHandler = error => {

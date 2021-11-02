@@ -40,7 +40,7 @@
         <input v-model="searchKey" type="search" id="search" placeholder="Rechercher les messages d'un utilisateur" autocomplete="off">
     </div>
   <div id="all-message-container" v-if="allMessages.length > 0">
-  <div id="message-container" v-for="singleMessage in filteredUser" v-bind:key="singleMessage.id">
+  <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
         <span id="img-user-container" v-if="singleMessage.imageProfil != null">
           <img :src="singleMessage.imageProfil" alt="" id="img-user">
@@ -55,7 +55,7 @@
       </div>
       <hr>
       <div id="like-delete-update-container">
-        <span id="like" @click="likeMessage()"><i class="far fa-thumbs-up"></i> J'aime</span>
+        <span class="like" :class="{'liked' : like}" @click="likeMessage(singleMessage)"><i class="far fa-thumbs-up" :class="{'liked' : (like && singleMessage.id == id)}"></i> J'aime</span>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin == true)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
@@ -103,16 +103,23 @@ export default {
         console.log(this.allMessages);
         })
       .catch(error => console.log(error))
+
   },
   computed: {
     ...mapState({
       user: 'userInfos',
     }),
+    allMessagesToReturn: function () {
+      return this.getAllMessages();
+    },
     filteredUser: function () {
+      console.log(this.allMessages);
+      console.log(this.allMessagesReverse);
         return this.allMessagesReverse.filter((user) => {
-            return user.firstname.toLowerCase().includes(this.searchKey.toLowerCase())
+            return user.firstname.toLowerCase().includes(this.searchKey.toLowerCase());
         })
     },
+    
   },
   data() {
     return {
@@ -124,6 +131,7 @@ export default {
       allMessagesReverse: '',
       dropdown: '',
       searchKey: "",
+      like: "",
     };
   },
   methods: {
@@ -229,6 +237,28 @@ export default {
       closeDropDown: function () {
         this.dropdown = false;
       },
+      likeMessage: function (singleMessage) {
+        // let self = this;
+        // this.allMessages = this.allMessages.filter(m => m.id !== this.singleMessage.id);
+        if(this.like) {
+          this.like = false;
+          console.log(this.like)
+          axios.post(`http://localhost:3000/api/messages/${singleMessage.id}`, {like:this.like, userId: this.user.userId, id: singleMessage.id})
+            .then(response => {
+              console.log(response);
+              // this.allMessages = self.allMessages.filter(m => m.id !== this.singleMessage.id);
+            })
+            .catch(error => console.log(error))
+        } else {
+          this.like = true;
+          console.log(this.like)
+          axios.post(`http://localhost:3000/api/messages/${singleMessage.id}`, {like: this.like, userId: this.user.userId, id: singleMessage.id})
+            .then(response => {
+              console.log(response);
+            })
+            .catch(error => console.log(error))
+        }
+      },
 
   },
 
@@ -310,10 +340,6 @@ input[type="file"] {
   border: none;
   margin: 15px auto;
   box-shadow: 1px 2px 3px rgb(209, 209, 209);
-}
-i {
-  font-size: 30px;
-  color: rgb(189, 195, 196);
 }
 #profile-container {
   display: flex;
@@ -401,12 +427,12 @@ input:focus{
   justify-content: space-between;
   flex-direction: column;
 }
-#trash i, #update i, #like i{
+#trash i, #update i{
   font-size: 15px;
   margin-left: 25px;
   
 }
-#trash, #update, #like{
+#trash, #update, .like{
   cursor: pointer;
 }
 #trash, #update{
@@ -548,6 +574,10 @@ ul li:hover {
 }
 #input-container {
     display: flex;
+}
+.liked {
+  color: blue;
+  font-weight: bold;
 }
 @media (max-width: 700px){
   #all-message-container{
