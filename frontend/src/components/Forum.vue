@@ -36,9 +36,11 @@
     <button id="send-message" @click="sendMessage" >Publier mon message</button>
   </div>
   </div>
-
+  <div id="input-container">
+        <input v-model="searchKey" type="search" id="search" placeholder="Rechercher les messages d'un utilisateur" autocomplete="off">
+    </div>
   <div id="all-message-container" v-if="allMessages.length > 0">
-  <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
+  <div id="message-container" v-for="singleMessage in filteredUser" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
         <span id="img-user-container" v-if="singleMessage.imageProfil != null">
           <img :src="singleMessage.imageProfil" alt="" id="img-user">
@@ -105,7 +107,12 @@ export default {
   computed: {
     ...mapState({
       user: 'userInfos',
-    })
+    }),
+    filteredUser: function () {
+        return this.allMessagesReverse.filter((user) => {
+            return user.firstname.toLowerCase().includes(this.searchKey.toLowerCase())
+        })
+    },
   },
   data() {
     return {
@@ -116,6 +123,7 @@ export default {
       userInLocalStorage: JSON.parse(localStorage.getItem('user')),
       allMessagesReverse: '',
       dropdown: '',
+      searchKey: "",
     };
   },
   methods: {
@@ -375,7 +383,6 @@ a {
 #all-message-container {
   background-color: white; 
   width: 80%;
-  margin-top: 30px;
   padding: 20px 30px 20px 30px;
   margin-bottom: 50px;
 }
@@ -529,6 +536,18 @@ ul li:hover {
   color: white;
   border: none;
   background-color: white;
+}
+#search {
+  background-color: aliceblue;
+  border-radius: 5px;
+  margin: 25px 40px;
+  border: none;
+  height: 30px;
+  padding-left: 10px;
+  width: 300px;
+}
+#input-container {
+    display: flex;
 }
 @media (max-width: 700px){
   #all-message-container{
