@@ -1,9 +1,10 @@
 const express = require ('express');
 const router = express.Router();
-const {likeMessages, getAllLike, isLiked} = require ('./../controllers/like-controllers.js');
+const {likeMessages, getLikeOfOneMessage, isLiked} = require ('./../controllers/like-controllers.js');
 const authorization = require ('../middleware/auth.js');
 
-router.post('/messages/:id', authorization, likeMessages);
-router.get('/messages/:id', authorization, getAllLike);
+router.post('/messages/:id', likeMessages);
+router.get('/messages/:id/like', getLikeOfOneMessage);
+router.get('/like/:id/like/:userId', isLiked);
 
 module.exports = router;

@@ -55,7 +55,8 @@
       </div>
       <hr>
       <div id="like-delete-update-container">
-        <span class="like" :class="{'liked' : like}" @click="likeMessage(singleMessage)"><i class="far fa-thumbs-up" :class="{'liked' : (like && singleMessage.id == id)}"></i> J'aime</span>
+        <span class="unlike" v-if="!singleMessage.likes" @click="likeMessage(singleMessage)" ><span v-if="singleMessage.likes" id="user-like">{{ singleMessage.likes }}</span><i id="unlike" class="far fa-thumbs-up"></i> J'aime</span>
+        <span class="like" v-if="singleMessage.likes" @click="likeMessage(singleMessage)" >{{ singleMessage.likes }}<i id="like" class="far fa-thumbs-up"></i> J'aime</span>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin == true)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
@@ -95,6 +96,7 @@ export default {
     }
     this.$store.dispatch('getUserInfos');
 
+
     axios.get('http://localhost:3000/api/messages')
       .then((response) => {
         this.allMessages = response.data
@@ -103,6 +105,8 @@ export default {
         console.log(this.allMessages);
         })
       .catch(error => console.log(error))
+
+    axios.get
 
   },
   computed: {
@@ -132,6 +136,7 @@ export default {
       dropdown: '',
       searchKey: "",
       like: "",
+      allLikes: "",
     };
   },
   methods: {
@@ -238,8 +243,11 @@ export default {
         this.dropdown = false;
       },
       likeMessage: function (singleMessage) {
-        // let self = this;
-        // this.allMessages = this.allMessages.filter(m => m.id !== this.singleMessage.id);
+        axios.get(`http://localhost:3000/api/like/${singleMessage.id}/like/${this.user.userId}`)
+            .then(response => {
+              console.log(response.data.message);
+              this.like = response.data.message;
+              console.log(this.like)
         if(this.like) {
           this.like = false;
           console.log(this.like)
@@ -258,8 +266,29 @@ export default {
             })
             .catch(error => console.log(error))
         }
-      },
+        console.log(singleMessage.id)
+        let self = this;
+        axios.get(`http://localhost:3000/api/messages/${singleMessage.id}/like`)
+          .then(response => {
+              console.log(response.data.message.length);
+              this.getAllMessages();
+              self.allLikes = response.data.message;
+              console.log(self.allLikes)
+            })
+            .catch(error => console.log(error))
+            })
+            .catch(error => console.log(error))
 
+
+        // let self = this;
+        // this.allMessages = this.allMessages.filter(m => m.id !== this.singleMessage.id);
+        // this.like = singleMessage.likes;
+        
+      },
+      // isLiked: function (singleMessage) {
+      
+      
+      // },
   },
 
 };
@@ -575,9 +604,12 @@ ul li:hover {
 #input-container {
     display: flex;
 }
-.liked {
+#like {
   color: blue;
   font-weight: bold;
+}
+#user-like{
+  margin-right: 5px;
 }
 @media (max-width: 700px){
   #all-message-container{
