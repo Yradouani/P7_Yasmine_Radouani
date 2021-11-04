@@ -32,10 +32,6 @@ const store = createStore ({
     state : {
         status: '',
         user: user,
-        // user: {
-        //     userId: -1,
-        //     token: '',
-        // },
         userInfos: {
             firstname: '',
             lastname: '',
@@ -43,9 +39,6 @@ const store = createStore ({
             imageProfil: '',
             isAdmin: '',
         }
-    },
-    getters : {
-
     },
     mutations : {
         setStatus: function (state, status) {
@@ -110,33 +103,6 @@ const store = createStore ({
                 })
                 .catch(error => console.log(error))
             },
-        // updateProfil: ({commit}) => {
-
-        // }
-            // request.get('/users')
-            //     .then(function (response) {
-            //         commit('userInfos', response.data);
-            //     })
-            //     .catch(error => console.log(error))
-
-        // sendMessage: ({commit}, post) => {
-        //     return new Promise((resolve, reject) => {
-        //         commit;
-        //         message.post('/', post)
-        //         .then(function (response) {
-        //             commit('setStatus', 'created');
-        //             resolve(response);
-        //         })
-        //         .catch(function (error){
-        //             commit('setStatus', 'error_create');
-        //             reject(error);
-        //         });
-        //         console.log(user);
-        //     })
-        // },
     },
-    modules : {
-        
-    }
 });
 export default store;
