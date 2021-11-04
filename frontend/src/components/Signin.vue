@@ -20,7 +20,7 @@
         v-model="email"
         placeholder="Adresse mail"
       />
-      <span id="control-text" v-if="!formEmail">Adresse email invalide</span>
+      <span id="control-text" v-if="mode == 'create' &&  (!formEmail || status == 'error_create')">Adresse email invalide ou déjà utilisée</span>
       </label>
       <div id="firstname-lastname" v-if="mode == 'create'">
         <div id="control-first-name">
@@ -54,12 +54,11 @@
           <i class="fas fa-eye" id="on" v-else @click="switchToHidePassword()"></i>
         </div>
       </label>
-      <span id="control-text" v-if="!formPassword">Mot de passe invalide (entre 3 et 8 charactères dont 1 lettre)</span>
+      <span id="control-text" v-if="mode == 'create' && !formPassword">Mot de passe invalide (entre 3 et 8 charactères dont 1 lettre)</span>
+      <span id="control-text" v-if="mode == 'login' && status == 'error_login'">Adresse mail et/ou mot de passe incorrect</span>
       <label for="add-picture" class="label-file" v-if="mode == 'create'">Choisir une image de profil</label>
       <input type="file" @change="onFileSelected" id="add-picture">
     </div>
-    <!-- <div v-if="mode == 'login' && status == 'error_login'">Adresse mail et/ou mot de passe invalide</div> -->
-    <!-- <div v-if="mode == 'login' && status == 'error_create'">Adresse mail déjà utilisée</div> -->
     
       <button @click="login()" v-if="mode == 'login'" class="button" :class="{'button--disabled' : !validatedFields, 'button-anim' : !formPassword}">
         <span v-if="status == 'loading'">En cours de connexion...</span>
@@ -74,7 +73,6 @@
 </template>
 
 <script>
-// import store from '@/store/'
 import {mapState} from 'vuex';
 export default {
   name: "Login",
@@ -121,7 +119,7 @@ export default {
         }
       }
     },
-    ...mapState([status])
+    ...mapState({status: 'status'})
   },
   methods: {
     onFileSelected: function (e) {
@@ -199,6 +197,7 @@ export default {
     },
     login: function (){
       const self = this;
+      console.log(this.mode);
       this.$store.dispatch('login', {
       email: this.email,
       password: this.password,
@@ -207,7 +206,9 @@ export default {
           self.$router.push('/forum');
       }), function (error) {
         console.log(error);
+        
       }
+      console.log(this.status)
     }
     
   },

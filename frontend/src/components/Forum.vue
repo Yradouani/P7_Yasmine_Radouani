@@ -55,8 +55,7 @@
       </div>
       <hr>
       <div id="like-delete-update-container">
-        <span class="unlike" v-if="!singleMessage.likes" @click="likeMessage(singleMessage)" ><span v-if="singleMessage.likes" id="user-like">{{ singleMessage.likes }}</span><i id="unlike" class="far fa-thumbs-up"></i> J'aime</span>
-        <span class="like" v-if="singleMessage.likes" @click="likeMessage(singleMessage)" >{{ singleMessage.likes }}<i id="like" class="far fa-thumbs-up"></i> J'aime</span>
+        <span class="unlike" @click="likeMessage(singleMessage)" :class="{'like' : singleMessage.like}"><span v-if="singleMessage.likes" :class="{'like' : like}">{{ singleMessage.likes }}</span><i class="far fa-thumbs-up" :class="{'like' : like}"></i> J'aime</span>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin == true)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
@@ -604,9 +603,10 @@ ul li:hover {
 #input-container {
     display: flex;
 }
-#like {
+.like {
   color: blue;
   font-weight: bold;
+  margin-left: 5px;
 }
 #user-like{
   margin-right: 5px;
