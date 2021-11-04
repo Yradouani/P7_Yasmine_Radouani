@@ -36,9 +36,9 @@
     <button id="send-message" @click="sendMessage" >Publier mon message</button>
   </div>
   </div>
-  <div id="input-container">
+  <!-- <div id="input-container">
         <input v-model="searchKey" type="search" id="search" placeholder="Rechercher les messages d'un utilisateur" autocomplete="off">
-    </div>
+    </div> -->
   <div id="all-message-container" v-if="allMessages.length > 0">
   <div id="message-container" v-for="singleMessage in allMessagesReverse" v-bind:key="singleMessage.id">
       <div id="user-infos-container">
@@ -55,7 +55,7 @@
       </div>
       <hr>
       <div id="like-delete-update-container">
-        <span class="unlike" @click="likeMessage(singleMessage)" :class="{'like' : (singleMessage.like && singleMessage.id == like.id)}"><span v-if="singleMessage.likes" :class="{'like' : like}">{{ singleMessage.likes }}</span><i class="far fa-thumbs-up" :class="{'like' : like}"></i> J'aime</span>
+        <span class="unlike" @click="likeMessage(singleMessage)" ><span v-if="singleMessage.likes">{{ singleMessage.likes }}</span><i class="far fa-thumbs-up" :class="{'like' : like._id && singleMessage.id == like.id}"></i> J'aime</span>
       <span id="trash" @click="deleteMessage(singleMessage)" v-if="(singleMessage.userId == user.userId) || (user.isAdmin == true)"><i class="fas fa-trash-alt" ></i> Supprimer</span>
       <span id="update" @click="updateMessage(singleMessage)" v-if="singleMessage.userId == user.userId"><i class="fas fa-edit"></i> Modifier</span>
       <div v-if="messageToUpdate !== null && messageToUpdate.id === singleMessage.id" id="message-to-update-container">
@@ -65,7 +65,6 @@
           <input type="file" @change="onFileSelected" id="new-picture">
         
         <input type="texte" placeholder="Modifier votre message" v-model="messageToUpdate.content" @keypress.enter="save" id="update-text-input"/>
-        <!-- <img :src="messageToUpdate.imageUrl" alt=""> -->
         <hr>
         <div>
           <button id="update-message" @click="save(singleMessage)" @keypress.enter="save(singleMessage)">Sauvegarder</button>
@@ -78,12 +77,8 @@
 </template>
 
 <script>
-// import { ref } from 'vue';
-// import store from '@/store/index.js'
-// import router from '../router/index.js'
 import axios from 'axios';
 import { mapState } from 'vuex';
-// import { cacheAdapterEnhancer } from 'axios-extensions';
 export default {
   name: 'profile',
   mounted: function () {
@@ -140,12 +135,6 @@ export default {
   },
   methods: {
       getAllMessages: function (){
-        // const http = axios.create({
-        //     baseURL: '/',
-        //     headers: { 'Cache-Control': 'no-cache' },
-        //     // cache will be enabled by default
-        //     adapter: cacheAdapterEnhancer(axios.defaults.adapter)
-        // });
         axios.get('http://localhost:3000/api/messages')
           .then((response) => {
             this.allMessages = response.data
@@ -242,26 +231,39 @@ export default {
         this.dropdown = false;
       },
       likeMessage: function (singleMessage) {
+        //Savoir si le message est déjà liké
         axios.get(`http://localhost:3000/api/like/${singleMessage.id}/like/${this.user.userId}`)
             .then(response => {
               console.log(response.data.message);
               this.like = response.data.message;
               console.log(this.like)
+              if(this.like){
+                console.log(this.like.id)
+              }
+              
         if(this.like) {
+          console.log(response.data.message);
           this.like = false;
           console.log(this.like)
           axios.post(`http://localhost:3000/api/messages/${singleMessage.id}`, {like:this.like, userId: this.user.userId, id: singleMessage.id})
             .then(response => {
               console.log(response);
-              // this.allMessages = self.allMessages.filter(m => m.id !== this.singleMessage.id);
             })
             .catch(error => console.log(error))
         } else {
+          console.log(response.data.message);
           this.like = true;
+          
           console.log(this.like)
           axios.post(`http://localhost:3000/api/messages/${singleMessage.id}`, {like: this.like, userId: this.user.userId, id: singleMessage.id})
             .then(response => {
               console.log(response);
+                axios.get(`http://localhost:3000/api/like/${singleMessage.id}/like/${this.user.userId}`)
+                  .then(response => { 
+                    this.like = response.data.message;
+                    console.log(this.like);
+                  })
+                  .catch(error => console.log(error))
             })
             .catch(error => console.log(error))
         }
@@ -277,17 +279,7 @@ export default {
             .catch(error => console.log(error))
             })
             .catch(error => console.log(error))
-
-
-        // let self = this;
-        // this.allMessages = this.allMessages.filter(m => m.id !== this.singleMessage.id);
-        // this.like = singleMessage.likes;
-        
       },
-      // isLiked: function (singleMessage) {
-      
-      
-      // },
   },
 
 };
@@ -614,6 +606,11 @@ ul li:hover {
 }
 .unlike i {
   margin-left: 5px;
+}
+.unlike:hover{
+  color:blue;
+  font-weight: bold;
+  transition : all 0.2s;
 }
 #user-like{
   margin-right: 5px;
